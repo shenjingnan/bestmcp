@@ -1,4 +1,4 @@
-import { BestMCP, Tool } from "bestmcp";
+import { BestMCP, Tool } from "@bestmcp/core";
 
 class CalculatorService {
   @Tool("计算两个数字的和")

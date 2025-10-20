@@ -2,7 +2,11 @@ import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TransportManager } from "../../../packages/core/transport-manager.js";
-import { type HTTPTransportConfig, type TransportConfig, TransportType } from "../../../packages/core/transports/base.js";
+import {
+  type HTTPTransportConfig,
+  type TransportConfig,
+  TransportType,
+} from "../../../packages/core/transports/base.js";
 import { HTTPTransport } from "../../../packages/core/transports/http.js";
 import { StdioTransport } from "../../../packages/core/transports/stdio.js";
 

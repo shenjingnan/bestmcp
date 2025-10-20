@@ -12,15 +12,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### 构建和开发
 ```bash
-# 构建项目
+# 构建核心包
 pnpm build
 
-# 开发模式 (监听文件变化)
+# 构建所有项目 (核心包 + 示例)
+pnpm build:all
+
+# 开发模式 (监听文件变化，核心包)
 pnpm dev
+
+# 清理构建输出
+pnpm clean
 
 # 类型检查 (不生成文件)
 pnpm type:check
 ```
+
+### 构建系统说明
+项目使用 **tsup** 作为主要构建工具，基于 esbuild 提供极快的构建速度：
+- **核心包**：输出 ESM (`dist/index.mjs`) 和 CJS (`dist/index.js`) 两种格式
+- **类型定义**：使用 tsc 单独生成 (`dist/*.d.ts`)
+- **示例项目**：仅输出 CJS 格式，便于运行
+- **构建时间**：通常在 100-200ms 内完成，比传统 tsc 快 10-100 倍
 
 ### 测试
 ```bash

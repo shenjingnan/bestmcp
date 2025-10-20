@@ -15,8 +15,10 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "pnpm -C packages/core build",
+    "build:all": "pnpm -C packages/core build && pnpm -C examples/calculator-mcp build",
+    "dev": "pnpm -C packages/core dev",
+    "clean": "pnpm -C packages/core clean && pnpm -C examples/calculator-mcp clean",
     "type:check": "tsc --noEmit",
     "test": "vitest run",
     "test:silent": "vitest run --silent",
@@ -44,6 +46,7 @@
     "@types/node": "^22.0.2",
     "cspell": "^9.2.1",
     "release-it": "^19.0.5",
+    "tsup": "^8.5.0",
     "typescript": "^5.5.4",
     "vitest": "^1.6.1"
   },
