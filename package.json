@@ -43,6 +43,8 @@
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
     "@release-it/conventional-changelog": "^10.0.1",
+    "@swc/core": "^1.13.5",
+    "@swc/helpers": "^0.5.17",
     "@types/node": "^22.0.2",
     "cspell": "^9.2.1",
     "release-it": "^19.0.5",
