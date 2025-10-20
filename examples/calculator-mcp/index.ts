@@ -22,7 +22,10 @@ class CalculatorService {
   }
 }
 
-const mcp = new BestMCP("calculator-mcp", "1.0.0");
+const mcp = new BestMCP({
+  name: "calculator-mcp",
+  version: "1.0.0"
+});
 
 mcp.register(CalculatorService);
 

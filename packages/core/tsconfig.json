@@ -8,7 +8,13 @@
     "sourceMap": true,
     "moduleResolution": "node",
     "module": "ESNext",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["./src/*"],
+      "@bestmcp/core": ["./src"],
+      "@bestmcp/core/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]

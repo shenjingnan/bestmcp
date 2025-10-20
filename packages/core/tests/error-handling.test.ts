@@ -472,7 +472,7 @@ describe("错误处理和边界条件测试", () => {
       const results = await Promise.all(promises);
 
       // 验证成功的请求都返回了正确结果
-      const successResults = results.filter((r) => r !== "error");
+      const successResults = results.filter((r: unknown) => r !== "error");
       expect(successResults).toHaveLength(7); // 20个中应该有7个成功
 
       successResults.forEach((result, _index) => {

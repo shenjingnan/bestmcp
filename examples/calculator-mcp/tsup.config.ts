@@ -20,7 +20,6 @@ export default defineConfig({
       parser: {
         syntax: "typescript",
         decorators: true,
-        emitDecoratorMetadata: true,
       },
       transform: {
         decoratorMetadata: true,
@@ -28,6 +27,14 @@ export default defineConfig({
       },
       loose: false,
       externalHelpers: true,
+    },
+    logger: {
+      setName: () => {},
+      success: () => {},
+      info: () => {},
+      error: () => {},
+      warn: () => {},
+      log: () => {},
     },
   },
   onSuccess: 'echo "✅ examples/calculator-mcp 构建完成"',

@@ -18,7 +18,13 @@
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
-    "composite": true
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["packages/core/src/*"],
+      "@bestmcp/core": ["packages/core/src"],
+      "@bestmcp/core/*": ["packages/core/src/*"]
+    }
   },
   "include": ["packages/**/*.ts", "examples/**/*.ts"],
   "exclude": ["node_modules", "dist"],
