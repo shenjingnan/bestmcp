@@ -1,4 +1,4 @@
-# BestMCP - 基于 TypeScript 装饰器的 MCP 服务器框架
+# BestMCP
 
 BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架，通过装饰器和 Zod 验证提供类型安全的工具声明方式。它简化了 MCP 服务器的开发流程，让开发者能够以声明式的方式定义工具和参数验证。
 
