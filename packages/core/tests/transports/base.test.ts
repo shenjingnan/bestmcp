@@ -1,7 +1,7 @@
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { BaseTransport, type TransportConfig, TransportType } from "../../../../packages/core/transports/base.js";
+import { BaseTransport, type TransportConfig, TransportType } from "@core/transports/base";
 
 // 创建一个具体的 BaseTransport 实现用于测试
 class TestTransport extends BaseTransport {

@@ -1,14 +1,14 @@
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { TransportManager } from "../../../packages/core/transport-manager.js";
+import { TransportManager } from "@core/transport-manager";
 import {
   type HTTPTransportConfig,
   type TransportConfig,
   TransportType,
-} from "../../../packages/core/transports/base.js";
-import { HTTPTransport } from "../../../packages/core/transports/http.js";
-import { StdioTransport } from "../../../packages/core/transports/stdio.js";
+} from "@core/transports/base";
+import { HTTPTransport } from "@core/transports/http";
+import { StdioTransport } from "@core/transports/stdio";
 
 // Mock console methods to avoid noise in tests
 const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});

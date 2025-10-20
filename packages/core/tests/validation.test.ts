@@ -7,7 +7,7 @@ import {
   inferTypeSchema,
   isZodSchemaOptional,
   zodSchemaToJsonSchema,
-} from "../../../packages/core/validation";
+} from "@core/validation";
 
 describe("获取参数名称", () => {
   it("应该从简单函数中提取参数名称", () => {

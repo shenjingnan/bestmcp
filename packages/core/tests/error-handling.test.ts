@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import "reflect-metadata";
 import { z } from "zod";
-import { Param, Tool } from "../../../packages/core/decorators";
-import { ToolNotFoundError, ToolValidationError } from "../../../packages/core/errors";
-import { BestMCP } from "../../../packages/core/server";
+import { Param, Tool } from "@core/decorators";
+import { ToolNotFoundError, ToolValidationError } from "@core/errors";
+import { BestMCP } from "@core/server";
 
 // Mock console methods to avoid noise in tests
 const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});

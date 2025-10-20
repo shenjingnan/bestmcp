@@ -1,11 +1,13 @@
 import { defineConfig } from "vitest/config";
+import path from "path";
 
 export default defineConfig({
   test: {
     include: ["packages/**/*.test.ts"],
     environment: "node",
     alias: {
-      "@bestmcp/core": "/Users/nemo/github/shenjingnan/bestmcp/packages/core/src",
+      "@core": path.resolve(__dirname, "packages/core/src"),
+      "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
     },
     resolveSnapshotPath: (testPath, snapExtension) => {
       return testPath + snapExtension;
@@ -13,7 +15,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@bestmcp/core": "/Users/nemo/github/shenjingnan/bestmcp/packages/core/src",
+      "@core": path.resolve(__dirname, "packages/core/src"),
+      "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
     },
   },
 });
