@@ -1,0 +1,16 @@
+{
+  "name": "calculator-mcp",
+  "version": "1.0.0",
+  "description": "Calculator MCP",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node index.ts"
+  },
+  "keywords": [
+    "calculator-mcp"
+  ],
+  "author": "shenjingnan <sjn.code@gmail.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.13.1"
+}

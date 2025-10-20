@@ -24,6 +24,6 @@
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true
   },
-  "include": ["packages/core/index.ts", "src/**/*.ts", "tests/**/*.ts", "packages/core/decorators.test.ts"],
+  "include": ["packages/**/*.ts", "examples/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
