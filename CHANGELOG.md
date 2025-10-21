@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.0.4](https://github.com/shenjingnan/bestmcp/compare/v0.0.3...v0.0.4) (2025-10-21)
+
 ## 0.0.3 (2025-10-21)
 
 ### Bug Fixes
