@@ -2,6 +2,17 @@
   "name": "bestmcp",
   "version": "0.0.2",
   "description": "BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架",
+  "author": "shenjingnan <sjn.code@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shenjingnan/bestmcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "typescript"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -33,13 +44,6 @@
     "check:fix": "biome check --write --unsafe .",
     "docs:dev": "cd docs && pnpm run dev"
   },
-  "keywords": [
-    "mcp",
-    "modelcontextprotocol",
-    "typescript"
-  ],
-  "author": "shenjingnan <sjn.code@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",
     "reflect-metadata": "^0.2.2",
