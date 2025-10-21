@@ -1,8 +1,8 @@
+import { TransportType } from "@core/transports/base";
+import { StdioTransport, type StdioTransportConfig } from "@core/transports/stdio";
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { TransportType } from "@core/transports/base";
-import { StdioTransport, type StdioTransportConfig } from "@core/transports/stdio";
 
 // Mock console methods to avoid noise in tests
 let consoleSpy: ReturnType<typeof vi.spyOn> & { mockClear: () => void };

@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import "reflect-metadata";
-import { z } from "zod";
 import { Param, Tool } from "@core/decorators";
 import { TOOL_PARAM_METADATA, TOOLS_METADATA } from "@core/types";
+import { z } from "zod";
 
 describe("工具装饰器", () => {
   beforeEach(() => {

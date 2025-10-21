@@ -8,16 +8,12 @@ export default defineConfig({
   dts: false,
   clean: true,
   sourcemap: true,
-  external: [
-    "@modelcontextprotocol/sdk",
-    "reflect-metadata",
-    "zod"
-  ],
+  external: ["@modelcontextprotocol/sdk", "reflect-metadata", "zod"],
   treeshake: true,
-  minify: false,
+  minify: true,
   target: "node18",
   outDir: "dist",
-  splitting: false,
+  splitting: true,
   swc: {
     minify: false,
     jsc: {

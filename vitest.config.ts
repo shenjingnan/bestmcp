@@ -1,5 +1,5 @@
+import path from "node:path";
 import { defineConfig } from "vitest/config";
-import path from "path";
 
 export default defineConfig({
   test: {
@@ -8,7 +8,7 @@ export default defineConfig({
     alias: {
       "@core": path.resolve(__dirname, "packages/core/src"),
       "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
-      "bestmcp": path.resolve(__dirname, "src"),
+      bestmcp: path.resolve(__dirname, "src"),
     },
     resolveSnapshotPath: (testPath, snapExtension) => {
       return testPath + snapExtension;
@@ -18,7 +18,7 @@ export default defineConfig({
     alias: {
       "@core": path.resolve(__dirname, "packages/core/src"),
       "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
-      "bestmcp": path.resolve(__dirname, "src"),
+      bestmcp: path.resolve(__dirname, "src"),
     },
   },
 });

@@ -1,10 +1,10 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { HTTPTransportConfig } from "@core/transports/base";
 import { TransportType } from "@core/transports/base";
 import { HTTPTransport } from "@core/transports/http";
+import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock node:http module
 vi.mock("node:http", () => ({

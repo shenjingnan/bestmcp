@@ -53,7 +53,6 @@ export interface JsonSchema {
 export const TOOLS_METADATA = Symbol("tools");
 export const TOOL_PARAM_METADATA = Symbol("tool:params");
 
-
 // 运行时配置接口
 export interface RunOptions {
   transport?: "stdio" | "http";

@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import "reflect-metadata";
-import { z } from "zod";
 import {
   extractParameters,
   getParamNames,
@@ -8,6 +7,7 @@ import {
   isZodSchemaOptional,
   zodSchemaToJsonSchema,
 } from "@core/validation";
+import { z } from "zod";
 
 describe("获取参数名称", () => {
   it("应该从简单函数中提取参数名称", () => {
