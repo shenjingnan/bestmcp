@@ -29,9 +29,23 @@
     }
   },
   "hooks": {
-    "before:init": ["pnpm audit --audit-level moderate"],
-    "before:release": "echo \"📦 准备发布版本 v${version}\"",
-    "after:bump": ["pnpm run build"],
-    "after:release": "echo \"🎉 版本 v${version} 发布完成！\""
+    "before:init": [
+      "pnpm audit --audit-level moderate",
+      "pnpm test",
+      "pnpm type:check",
+      "pnpm check:fix"
+    ],
+    "before:release": [
+      "echo \"📦 准备发布版本 v${version}\"",
+      "pnpm clean",
+      "pnpm build:all"
+    ],
+    "after:bump": [
+      "pnpm run build",
+      "echo \"✅ 版本 v${version} 构建完成\""
+    ],
+    "after:release": [
+      "echo \"🎉 版本 v${version} 发布完成！\""
+    ]
   }
 }
