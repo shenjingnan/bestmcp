@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.5-beta.0](https://github.com/shenjingnan/bestmcp/compare/v0.0.4...v0.0.5-beta.0) (2025-10-21)
+
+### Features
+
+* **build:** 优化构建流程和发布配置 ([#2](https://github.com/shenjingnan/bestmcp/issues/2)) ([4c244b5](https://github.com/shenjingnan/bestmcp/commit/4c244b525a2c932c1d03b434fd13354ac497eff0))
+
+### Bug Fixes
+
+* **deploy:** 修复 Vercel 部署失败问题 ([#1](https://github.com/shenjingnan/bestmcp/issues/1)) ([ef471d2](https://github.com/shenjingnan/bestmcp/commit/ef471d217a75bed493ccc644bc95c2e3dc7bb527))
+
 ## [0.0.4](https://github.com/shenjingnan/bestmcp/compare/v0.0.3...v0.0.4) (2025-10-21)
 
 ## 0.0.3 (2025-10-21)
