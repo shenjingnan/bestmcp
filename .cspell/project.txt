@@ -1,4 +1,5 @@
 bestmcp
+esbuild
 jndi
 modelcontextprotocol
 shenjingnan

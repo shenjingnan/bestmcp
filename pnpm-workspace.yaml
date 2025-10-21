@@ -1,4 +1,8 @@
 packages:
-  - 'packages/*'
-  - 'examples/*'
-  - 'tools/*'
+  - packages/*
+  - examples/*
+  - tools/*
+
+overrides:
+  '@conventional-changelog/git-client@<2.0.0': '>=2.0.0'
+  esbuild@<=0.24.2: '>=0.25.0'
