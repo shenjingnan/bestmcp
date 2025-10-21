@@ -51,9 +51,9 @@ importers:
 
   examples/calculator-mcp:
     dependencies:
-      '@bestmcp/core':
+      bestmcp:
         specifier: workspace:*
-        version: link:../../packages/core
+        version: link:../..
 
   packages/core:
     dependencies:
