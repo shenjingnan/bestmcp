@@ -18,15 +18,19 @@
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
     "composite": true,
     "baseUrl": ".",
     "paths": {
       "@core/*": ["packages/core/src/*"],
       "@bestmcp/core": ["packages/core/src"],
-      "@bestmcp/core/*": ["packages/core/src/*"]
+      "@bestmcp/core/*": ["packages/core/src/*"],
+      "bestmcp": ["src"],
+      "bestmcp/*": ["src/*"]
     }
   },
-  "include": ["packages/**/*.ts", "examples/**/*.ts"],
+  "include": ["packages/**/*.ts", "examples/**/*.ts", "src/**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": true

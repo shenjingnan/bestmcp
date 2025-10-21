@@ -8,6 +8,7 @@ export default defineConfig({
     alias: {
       "@core": path.resolve(__dirname, "packages/core/src"),
       "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
+      "bestmcp": path.resolve(__dirname, "src"),
     },
     resolveSnapshotPath: (testPath, snapExtension) => {
       return testPath + snapExtension;
@@ -17,6 +18,7 @@ export default defineConfig({
     alias: {
       "@core": path.resolve(__dirname, "packages/core/src"),
       "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
+      "bestmcp": path.resolve(__dirname, "src"),
     },
   },
 });
