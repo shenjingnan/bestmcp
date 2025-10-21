@@ -3,7 +3,18 @@
   "language": "en",
   "enableFiletypes": ["typescript", "javascript", "json", "markdown", "yaml", "toml"],
   "files": ["**/*.{ts,js,json,md,yml,yaml,toml}"],
-  "ignorePaths": ["docs/out/**", "dist/**", "node_modules/**", "pnpm-lock.yaml", "coverage/**", "coverage.lcov/**"],
+  "ignorePaths": [
+    "docs/out/**",
+    "dist/**",
+    "node_modules/**",
+    "pnpm-lock.yaml",
+    "coverage/**",
+    "coverage.lcov/**",
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/coverage/**",
+    "**/coverage.lcov/**"
+  ],
   "dictionaryDefinitions": [
     {
       "name": "project",
