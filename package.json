@@ -29,6 +29,7 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "spell:check": "cspell \"**/*.{ts,js,json,md,yaml}\"",
+    "check": "biome check .",
     "check:fix": "biome check --write --unsafe .",
     "docs:dev": "cd docs && pnpm run dev"
   },
