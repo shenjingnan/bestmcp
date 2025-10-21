@@ -18,21 +18,29 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     }
   },
   "files": [
-    "dist/**/*"
+    "dist/index.js",
+    "dist/index.mjs",
+    "dist/index.d.ts",
+    "dist/index.js.map",
+    "dist/index.mjs.map",
+    "dist/packages/core/src/**/*.d.ts",
+    "dist/packages/core/src/**/*.d.ts.map",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
-    "build": "pnpm build:core && pnpm build:root",
-    "build:root": "pnpm build:js && pnpm build:dts",
+    "build": "pnpm build:core && pnpm build:js && pnpm build:dts",
     "build:core": "pnpm -C packages/core build",
     "build:js": "tsup",
-    "build:dts": "tsc --emitDeclarationOnly --outDir dist && cp dist/src/index.d.ts dist/index.d.ts",
+    "build:dts": "tsc --project tsconfig.dts.json && sed 's|\"./|\"./packages/core/src/|g' dist/packages/core/src/index.d.ts > dist/index.d.ts",
     "build:all": "pnpm build && pnpm -C examples/calculator-mcp build",
     "dev": "pnpm -C packages/core dev",
+    "dev:root": "tsup --watch",
     "clean": "rm -rf dist && pnpm -C packages/core clean && pnpm -C examples/calculator-mcp clean",
     "type:check": "tsc --noEmit",
     "test": "vitest run",
@@ -42,7 +50,8 @@
     "spell:check": "cspell \"**/*.{ts,js,json,md,yaml}\"",
     "check": "biome check .",
     "check:fix": "biome check --write --unsafe .",
-    "docs:dev": "cd docs && pnpm run dev"
+    "docs:dev": "cd docs && pnpm run dev",
+    "prepublishOnly": "pnpm clean && pnpm build:all && pnpm test && pnpm type:check && pnpm check:fix"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",
