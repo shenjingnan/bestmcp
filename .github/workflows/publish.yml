@@ -69,6 +69,7 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
           registry-url: "https://registry.npmjs.org"
 
       - name: 安装依赖
@@ -110,10 +111,6 @@ jobs:
           echo "target_version=$TARGET_VERSION" >> $GITHUB_OUTPUT
           echo "prerelease_id=$PRERELEASE_ID" >> $GITHUB_OUTPUT
 
-      - name: 安全审查
-        run: |
-          pnpm audit --audit-level moderate
-
       - name: 发布
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -147,11 +144,21 @@ jobs:
           echo "🔍 环境检查："
           echo "   - Node版本: $(node --version)"
           echo "   - pnpm版本: $(pnpm --version)"
-          echo "   - Git状态: $(git status --porcelain | wc -l) 个文件有修改"
           echo "   - 当前分支: $(git branch --show-current)"
-          echo "   - 最新标签: $(git describe --tags --match='v*' --abbrev=0 || echo '无标签')"
+          echo "   - Git状态: $(git status --porcelain | wc -l) 个文件有修改"
           echo ""
 
           # 执行发布命令
           echo "🚀 执行发布命令..."
-          eval "$RELEASE_CMD"
+
+          # 执行发布并捕获错误
+          if ! eval "$RELEASE_CMD"; then
+            echo "❌ 发布失败！"
+            echo "📋 错误信息："
+            echo "   - 可能原因：版本号冲突、构建失败、网络问题或权限问题"
+            echo "   - 检查日志中的详细错误信息"
+            echo "   - 尝试在本地执行相同命令进行调试"
+            exit 1
+          fi
+
+          echo "✅ 发布命令执行完成！"

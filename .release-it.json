@@ -30,8 +30,8 @@
   },
   "hooks": {
     "before:init": ["pnpm audit --audit-level moderate"],
-    "after:bump": ["pnpm run build"],
     "before:release": "echo \"📦 准备发布版本 v${version}\"",
+    "after:bump": ["pnpm run build"],
     "after:release": "echo \"🎉 版本 v${version} 发布完成！\""
   }
 }
