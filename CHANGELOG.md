@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.0.5](https://github.com/shenjingnan/bestmcp/compare/v0.0.5-beta.0...v0.0.5) (2025-10-21)
+
 ## [0.0.5-beta.0](https://github.com/shenjingnan/bestmcp/compare/v0.0.4...v0.0.5-beta.0) (2025-10-21)
 
 ### Features

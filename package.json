@@ -1,6 +1,6 @@
 {
   "name": "bestmcp",
-  "version": "0.0.5-beta.0",
+  "version": "0.0.5",
   "description": "BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架",
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
