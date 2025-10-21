@@ -6,9 +6,7 @@
     "emitDeclarationOnly": true,
     "outDir": "dist"
   },
-  "include": [
-    "packages/core/src/**/*.ts"
-  ],
+  "include": ["packages/core/src/**/*.ts"],
   "exclude": [
     "node_modules",
     "dist",
