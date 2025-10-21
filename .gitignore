@@ -30,4 +30,4 @@ dist
 
 # Keep specific declaration files that are manually maintained
 !dist/**/*.d.ts
-!examples/calculator-mcp/index.d.ts
+!examples/**/*.d.ts
