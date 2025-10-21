@@ -13,6 +13,17 @@ export default defineConfig({
     resolveSnapshotPath: (testPath, snapExtension) => {
       return testPath + snapExtension;
     },
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "lcov"],
+      exclude: [
+        "node_modules/",
+        "dist/",
+        "**/*.test.ts",
+        "**/*.config.ts",
+        "coverage/",
+      ],
+    },
   },
   resolve: {
     alias: {
