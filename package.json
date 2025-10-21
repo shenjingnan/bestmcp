@@ -46,8 +46,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",
-    "reflect-metadata": "^0.2.2",
-    "zod": "^3.25.76"
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
@@ -60,7 +59,8 @@
     "release-it": "^19.0.5",
     "tsup": "^8.5.0",
     "typescript": "^5.5.4",
-    "vitest": "^1.6.1"
+    "vitest": "^1.6.1",
+    "zod": "^3.25.76"
   },
   "packageManager": "pnpm@10.13.1"
 }

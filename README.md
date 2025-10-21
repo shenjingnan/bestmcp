@@ -78,10 +78,14 @@ BestMCP 自动将 Zod Schema 转换为 MCP 协议所需的 JSON Schema，包括�
 ### 安装
 
 ```bash
-npm install bestmcp
+npm install bestmcp zod
 # 或
-pnpm add bestmcp
+pnpm add bestmcp zod
 ```
+
+**依赖说明**:
+- `bestmcp`: 核心框架包
+- `zod`: 参数验证库（peer dependency，需要手动安装）
 
 ### 基础使用示例
 
@@ -562,8 +566,11 @@ class ZodValidationError extends Error {
 #### 核心依赖
 
 - **@modelcontextprotocol/sdk**: MCP 协议官方 SDK
-- **zod**: 运行时类型验证库
 - **reflect-metadata**: 装饰器元数据支持
+
+#### Peer Dependencies
+
+- **zod**: 运行时类型验证库（需要在使用者的项目中单独安装）
 
 #### 开发依赖
 
