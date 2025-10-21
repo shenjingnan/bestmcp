@@ -11,9 +11,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@core/*": ["./src/*"],
-      "@bestmcp/core": ["./src"],
-      "@bestmcp/core/*": ["./src/*"]
+      "@core/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"],
