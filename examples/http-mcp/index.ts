@@ -7,7 +7,7 @@ class CalculatorService {
     @Param(z.number(), "第一个值")
     a: number,
     @Param(z.number(), "第二个值")
-    b: number
+    b: number,
   ): number {
     return a + b;
   }
@@ -17,7 +17,7 @@ class CalculatorService {
     @Param(z.number(), "第一个值")
     a: number,
     @Param(z.number(), "第二个值")
-    b: number
+    b: number,
   ): number {
     return a - b;
   }
@@ -27,7 +27,7 @@ class CalculatorService {
     @Param(z.number(), "第一个值")
     a: number,
     @Param(z.number(), "第二个值")
-    b: number
+    b: number,
   ): number {
     return a * b;
   }
@@ -37,7 +37,7 @@ class CalculatorService {
     @Param(z.number(), "第一个值")
     a: number,
     @Param(z.number(), "第二个值")
-    b: number
+    b: number,
   ): number {
     return a / b;
   }
