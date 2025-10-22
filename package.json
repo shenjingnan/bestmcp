@@ -38,10 +38,10 @@
     "build:core": "pnpm -C packages/core build",
     "build:js": "tsup",
     "build:dts": "tsc --project tsconfig.dts.json && sed 's|\"./|\"./packages/core/src/|g' dist/packages/core/src/index.d.ts > dist/index.d.ts",
-    "build:all": "pnpm build && pnpm -C examples/calculator-mcp build",
-    "dev": "pnpm -C packages/core dev",
+    "dev": "pnpm dev:core",
+    "dev:core": "pnpm -C packages/core dev",
     "dev:root": "tsup --watch",
-    "clean": "rm -rf dist && pnpm -C packages/core clean && pnpm -C examples/calculator-mcp clean",
+    "clean": "rm -rf dist && pnpm -C packages/core clean",
     "type:check": "tsc --noEmit",
     "test": "vitest run",
     "test:silent": "vitest run --silent",
@@ -51,7 +51,7 @@
     "check": "biome check .",
     "check:fix": "biome check --write --unsafe .",
     "docs:dev": "cd docs && pnpm run dev",
-    "prepublishOnly": "pnpm clean && pnpm build:all && pnpm test && pnpm type:check && pnpm check:fix"
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm type:check && pnpm check:fix"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",
