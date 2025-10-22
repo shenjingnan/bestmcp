@@ -29,7 +29,6 @@ class CalculatorService {
     @Param(z.number(), "第二个值")
     b: number
   ): number {
-    console.log('乘法', a, b);
     return a * b;
   }
 
