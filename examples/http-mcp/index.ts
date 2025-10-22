@@ -29,4 +29,4 @@ const mcp = new BestMCP({
 
 mcp.register(CalculatorService);
 
-mcp.run();
+mcp.run({ transport: "http" });

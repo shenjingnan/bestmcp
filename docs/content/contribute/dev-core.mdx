@@ -1,0 +1,191 @@
+# 开发 BestMCP 框架
+
+本文档介绍如何作为贡献者开发和维护 BestMCP 框架核心代码。
+
+## 开发环境设置
+
+### 安装依赖
+
+```bash
+# 安装所有依赖（包括 examples 和 docs）
+pnpm install
+```
+
+### 开发命令
+
+```bash
+pnpm dev
+```
+
+## 项目结构
+
+```
+packages/core/
+├── src/
+│   ├── index.ts          # 主入口
+│   ├── server.ts         # BestMCP 主类
+│   ├── decorators.ts     # @Tool 和 @Param 装饰器
+│   ├── validation.ts     # 参数验证系统
+│   ├── types.ts          # 类型定义
+│   ├── errors.ts         # 错误类
+│   └── transports/       # 传输层实现
+├── tests/                # 测试文件
+├── tsup.config.ts        # 构建配置
+└── package.json          # 核心包配置
+```
+
+## 开发流程
+
+### 1. 修改代码
+
+在 `packages/core/src/` 中修改框架代码，开发模式会自动重新构建。
+
+### 2. 测试验证
+
+```bash
+# 运行所有测试
+pnpm test
+
+# 监听模式运行测试
+pnpm test:watch
+
+# 生成覆盖率报告
+pnpm test:coverage
+```
+
+### 3. 类型检查
+
+```bash
+# 类型检查（不生成文件）
+pnpm type:check
+```
+
+### 4. 代码质量
+
+```bash
+# 自动修复代码格式和 lint 问题
+pnpm check:fix
+
+# 检查拼写
+pnpm spell:check
+```
+
+## 测试框架开发
+
+### 单元测试
+
+在 `packages/core/tests/` 中添加测试文件：
+
+```typescript
+import { describe, it, expect } from 'vitest';
+import { BestMCP } from '../src/server';
+
+describe('新功能测试', () => {
+  it('应该正确处理新功能', () => {
+    // 测试代码
+  });
+});
+```
+
+## 核心功能开发指南
+
+### 添加新装饰器
+
+在 `decorators.ts` 中添加新的装饰器：
+
+```typescript
+export function NewDecorator(options: any) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    // 装饰器实现
+  };
+}
+```
+
+### 扩展传输层
+
+1. 在 `transports/` 目录创建新文件
+2. 继承 `BaseTransport` 类
+3. 实现必要的方法
+4. 在 `transport-manager.ts` 中注册
+
+### 错误处理
+
+在 `errors.ts` 中定义新的错误类型：
+
+```typescript
+export class NewError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'NewError';
+  }
+}
+```
+
+## 构建和发布
+
+### 本地构建
+
+```bash
+# 构建核心包
+pnpm build:core
+
+# 完整构建（包括类型定义）
+pnpm build
+```
+
+### 发布前检查
+
+```bash
+# 运行完整检查流程
+pnpm prepublishOnly
+```
+
+这个命令会依次执行：
+- 清理构建输出
+- 完整构建
+- 运行测试
+- 类型检查
+- 代码质量检查
+
+## 代码规范
+
+### TypeScript 配置
+
+项目启用了严格的 TypeScript 配置：
+- `experimentalDecorators: true`
+- `emitDecoratorMetadata: true`
+- `strict: true`
+
+### 命名约定
+
+- 类名使用 PascalCase
+- 方法和变量使用 camelCase
+- 常量使用 UPPER_SNAKE_CASE
+- 文件名使用 kebab-case
+
+### 注释规范
+
+所有新增的代码注释和文档应使用中文。
+
+## 调试技巧
+
+### 添加调试日志
+
+```typescript
+// 在关键位置添加调试信息
+console.log('调试信息:', data);
+```
+
+### 使用断点调试
+
+在 VS Code 中配置 `.vscode/launch.json`：
+
+```json
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Debug BestMCP",
+  "program": "${workspaceFolder}/packages/core/src/index.ts",
+  "outFiles": ["${workspaceFolder}/packages/core/dist/**/*.js"]
+}
+```
