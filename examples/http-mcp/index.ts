@@ -1,23 +1,46 @@
-import { BestMCP, Tool } from "bestmcp";
+import { BestMCP, Param, Tool } from "bestmcp";
+import z from "zod";
 
 class CalculatorService {
   @Tool("计算两个数字的和")
-  add(a: number, b: number): number {
+  add(
+    @Param(z.number(), "第一个值")
+    a: number,
+    @Param(z.number(), "第二个值")
+    b: number
+  ): number {
     return a + b;
   }
 
   @Tool("计算两个数字的差")
-  subtract(a: number, b: number): number {
+  subtract(
+    @Param(z.number(), "第一个值")
+    a: number,
+    @Param(z.number(), "第二个值")
+    b: number
+  ): number {
     return a - b;
   }
 
   @Tool("计算两个数字的积")
-  multiply(a: number, b: number): number {
-    return a * b;
+  multiply(
+    @Param(z.number(), "第一个值")
+    a: number,
+    @Param(z.number(), "第二个值")
+    b: number
+  ): number {
+    const res = a * b;
+    console.log(`${a} * ${b} = `, res);
+    return res;
   }
 
   @Tool("计算两个数字的商")
-  divide(a: number, b: number): number {
+  divide(
+    @Param(z.number(), "第一个值")
+    a: number,
+    @Param(z.number(), "第二个值")
+    b: number
+  ): number {
     return a / b;
   }
 }
