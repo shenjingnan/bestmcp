@@ -37,5 +37,4 @@ export default defineConfig({
       log: () => {},
     },
   },
-  onSuccess: 'echo "✅ examples/calculator-mcp 构建完成"',
 });
