@@ -29,9 +29,7 @@ class CalculatorService {
     @Param(z.number(), "第二个值")
     b: number
   ): number {
-    const res = a * b;
-    console.log(`${a} * ${b} = `, res);
-    return res;
+    return a * b;
   }
 
   @Tool("计算两个数字的商")
