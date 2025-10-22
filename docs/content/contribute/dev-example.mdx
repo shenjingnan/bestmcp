@@ -1,0 +1,24 @@
+# 开发和调试官方示例
+
+本文档介绍如何作为贡献者开发和调试 BestMCP 官方示例项目。
+
+## 开发命令
+
+### 开发特定示例
+
+可以使用 `pnpm -C examples/<example-name> dev` 开发和调试特定示例
+
+```bash
+# 开发 stdio-mcp 示例
+pnpm -C examples/stdio-mcp dev
+
+# 开发 http-mcp 示例
+pnpm -C examples/http-mcp dev
+```
+
+## 添加新示例
+
+如果你需要添加新的官方示例：
+
+1. 在 `examples/` 目录下创建新文件夹
+2. 配置 `package.json` 和 `tsup.config.ts`

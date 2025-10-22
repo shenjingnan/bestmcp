@@ -23,10 +23,10 @@ class CalculatorService {
 }
 
 const mcp = new BestMCP({
-  name: "calculator-mcp",
+  name: "calculator-http-mcp",
   version: "1.0.0",
 });
 
 mcp.register(CalculatorService);
 
-mcp.run();
+mcp.run({ transport: "http" });

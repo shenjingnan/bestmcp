@@ -1,0 +1,296 @@
+# 使用 BestMCP
+
+本文档介绍如何在自己的项目中使用 BestMCP 框架。
+
+## 安装
+
+```bash
+# 使用 npm
+npm install bestmcp
+
+# 使用 pnpm
+pnpm add bestmcp
+
+# 使用 yarn
+yarn add bestmcp
+```
+
+## 快速开始
+
+### 1. 基本项目设置
+
+创建一个新的 TypeScript 项目：
+
+```bash
+mkdir my-mcp-project
+cd my-mcp-project
+npm init -y
+npm install bestmcp zod
+npm install -D typescript @types/node tsup
+```
+
+### 2. TypeScript 配置
+
+创建 `tsconfig.json`：
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
+```
+
+### 3. 创建服务
+
+创建 `src/index.ts`：
+
+```typescript
+import { BestMCP, Tool, Param } from 'bestmcp';
+import { z } from 'zod';
+
+class MyService {
+  @Tool("计算两个数字的和")
+  add(
+    @Param(z.number(), "第一个数字") a: number,
+    @Param(z.number(), "第二个数字") b: number
+  ): number {
+    return a + b;
+  }
+
+  @Tool("处理文本")
+  processText(
+    @Param(z.string(), "要处理的文本") text: string,
+    @Param(z.enum(['upper', 'lower']).optional(), "转换方式") case?: 'upper' | 'lower'
+  ): string {
+    if (case === 'upper') return text.toUpperCase();
+    if (case === 'lower') return text.toLowerCase();
+    return text;
+  }
+}
+
+const mcp = new BestMCP({
+  name: "my-mcp-server",
+  version: "1.0.0"
+});
+
+mcp.register(MyService);
+
+mcp.run();
+```
+
+## 构建配置
+
+### 使用 tsup
+
+创建 `tsup.config.ts`：
+
+```typescript
+import { defineConfig } from "tsup";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+  },
+  format: ["cjs"],
+  clean: true,
+  sourcemap: true,
+  external: ["bestmcp"],
+  target: "node18",
+  outDir: "dist",
+});
+```
+
+### 添加构建脚本
+
+在 `package.json` 中添加：
+
+```json
+{
+  "scripts": {
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "dev": "tsup --watch"
+  }
+}
+```
+
+## 使用官方示例
+
+你可以直接复制官方示例到自己的项目中：
+
+### 1. 复制示例文件
+
+```bash
+# 复制 STDIO 示例
+cp -r examples/stdio-mcp/* my-project/
+
+# 或者复制 HTTP 示例
+cp -r examples/http-mcp/* my-project/
+```
+
+### 2. 安装依赖
+
+```bash
+cd my-project
+pnpm install
+```
+
+### 3. 修改配置
+
+编辑 `package.json` 中的项目信息：
+
+```json
+{
+  "name": "my-mcp",
+  "version": "1.0.0",
+  "description": "我的MCP服务"
+}
+```
+
+## 运行模式
+
+### Stdio 模式（默认）
+
+```typescript
+// 标准输入输出模式，适合命令行工具集成
+mcp.run();
+```
+
+### HTTP 模式
+
+```typescript
+// HTTP 服务器模式，适合 Web 应用集成
+await mcp.run({
+  transport: 'http',
+  port: 3000
+});
+```
+
+## 工具定义
+
+### 基本工具
+
+```typescript
+@Tool("工具描述")
+async myTool(param1: string, param2: number): Promise<string> {
+  return `结果: ${param1} - ${param2}`;
+}
+```
+
+### 带参数验证的工具
+
+```typescript
+@Tool("用户信息工具")
+async getUserInfo(
+  @Param(z.string().min(1), "用户名") username: string,
+  @Param(z.number().min(0).max(100).optional(), "年龄") age?: number
+): Promise<object> {
+  return { username, age };
+}
+```
+
+### 复杂参数类型
+
+```typescript
+interface UserProfile {
+  name: string;
+  email: string;
+  settings: {
+    theme: 'light' | 'dark';
+    notifications: boolean;
+  };
+}
+
+@Tool("更新用户配置")
+async updateProfile(
+  @Param(z.object({
+    name: z.string(),
+    email: z.string().email(),
+    settings: z.object({
+      theme: z.enum(['light', 'dark']),
+      notifications: z.boolean()
+    })
+  }), "用户配置") profile: UserProfile
+): Promise<void> {
+  // 处理逻辑
+}
+```
+
+## 错误处理
+
+```typescript
+import { ToolValidationError } from 'bestmcp';
+
+@Tool("可能失败的工具")
+async riskyOperation(@Param(z.string(), "输入") input: string): Promise<string> {
+  if (input === 'error') {
+    throw new ToolValidationError('这是一个预期的错误');
+  }
+  return `处理结果: ${input}`;
+}
+```
+
+## 调试技巧
+
+### 1. 查看已注册工具
+
+```typescript
+// 在 mcp.run() 之前添加
+console.log('已注册工具:', mcp.getToolList());
+```
+
+### 2. 验证参数
+
+```typescript
+const result = mcp.validateTool('myTool', { param1: 'test', param2: 123 });
+console.log('验证结果:', result);
+```
+
+### 3. 获取统计信息
+
+```typescript
+console.log('工具统计:', mcp.getToolStats());
+```
+
+## 常见问题
+
+### Q: 如何处理异步操作？
+
+A: 工具方法可以是 async 的：
+
+```typescript
+@Tool("异步操作")
+async asyncOperation(@Param(z.string(), "输入") input: string): Promise<string> {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return `异步处理: ${input}`;
+}
+```
+
+### Q: 如何添加自定义错误类型？
+
+A: 继承基础错误类：
+
+```typescript
+import { BestMCPError } from 'bestmcp';
+
+class CustomError extends BestMCPError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'CustomError';
+  }
+}
+```
+
+## 更多示例
+
+查看 `examples/` 目录中的完整示例
+
+更多详细文档请参考 [开发指南](./contribute/dev-examples.md) 和 [框架开发](./contribute/dev-core.md)。
