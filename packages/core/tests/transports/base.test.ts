@@ -1,5 +1,5 @@
 import { BaseTransport, type TransportConfig, TransportType } from "@core/transports/base";
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import type { Server } from "@modelcontextprotocol/sdk/server";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 

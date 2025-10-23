@@ -1,6 +1,6 @@
 import { TransportType } from "@core/transports/base";
 import { StdioTransport, type StdioTransportConfig } from "@core/transports/stdio";
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import type { Server } from "@modelcontextprotocol/sdk/server";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 

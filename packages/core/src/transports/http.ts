@@ -1,5 +1,5 @@
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import type { Server } from "@modelcontextprotocol/sdk/server";
 import {
   StreamableHTTPServerTransport,
   type StreamableHTTPServerTransportOptions,
