@@ -1,7 +1,7 @@
 import type { z } from "zod";
 import "reflect-metadata";
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
-import { Server } from "@modelcontextprotocol/sdk/server";
+import { Server } from "@core/internal/mcp-sdk";
 import {
   type CallToolRequest,
   CallToolRequestSchema,

@@ -1,10 +1,6 @@
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
-import type { Server } from "@modelcontextprotocol/sdk/server";
-import {
-  StreamableHTTPServerTransport,
-  type StreamableHTTPServerTransportOptions,
-} from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
+import type { Server, Transport } from "@core/internal/mcp-sdk";
+import { StreamableHTTPServerTransport, type StreamableHTTPServerTransportOptions } from "@core/internal/mcp-sdk";
 import { BaseTransport, type HTTPTransportConfig, TransportType } from "./base.js";
 
 /**
