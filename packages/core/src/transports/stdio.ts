@@ -1,7 +1,6 @@
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { BaseTransport, type TransportConfig, TransportType } from "./base.js";
+import type { Server, Transport } from "@core/internal/mcp-sdk";
+import { StdioServerTransport } from "@core/internal/mcp-sdk";
+import { BaseTransport, type TransportConfig, TransportType } from "@core/transports/base";
 
 /**
  * Stdio 传输层配置

@@ -1,23 +1,17 @@
 import type { z } from "zod";
 import "reflect-metadata";
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import {
-  type CallToolRequest,
-  CallToolRequestSchema,
-  type CallToolResult,
-  ListToolsRequestSchema,
-  type Tool as McpSdkTool,
-} from "@modelcontextprotocol/sdk/types.js";
-import { ToolNotFoundError, ToolValidationError, ZodValidationError } from "./errors.js";
-import { TransportManager } from "./transport-manager.js";
+import { ToolNotFoundError, ToolValidationError, ZodValidationError } from "@core/errors";
+import type { CallToolRequest, CallToolResult, Tool as McpSdkTool } from "@core/internal/mcp-sdk";
+import { CallToolRequestSchema, ListToolsRequestSchema, Server } from "@core/internal/mcp-sdk";
+import { TransportManager } from "@core/transport-manager";
 import {
   type BaseTransport,
   type HTTPTransport,
   type HTTPTransportConfig,
   type TransportConfig,
   TransportType,
-} from "./transports/index.js";
+} from "@core/transports";
 import {
   type BestMCPConfig,
   type JsonSchema,
@@ -27,7 +21,7 @@ import {
   TOOLS_METADATA,
   type ToolExecutor,
   type ToolMetadata,
-} from "./types.js";
+} from "@core/types";
 
 export class BestMCP {
   private name: string;

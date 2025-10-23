@@ -1,5 +1,5 @@
+import { type JsonSchema, type ParamTypeMetadata, TOOL_PARAM_METADATA } from "@core/types";
 import { z } from "zod";
-import { type JsonSchema, type ParamTypeMetadata, TOOL_PARAM_METADATA } from "./types";
 
 // 参数名提取函数
 // biome-ignore lint/complexity/noBannedTypes: 需要接受任何函数类型以提取参数名

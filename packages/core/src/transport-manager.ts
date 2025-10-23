@@ -1,13 +1,12 @@
-import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
+import type { Server, Transport } from "@core/internal/mcp-sdk";
 import {
   type BaseTransport,
   type HTTPTransportConfig,
   type TransportConfig,
   TransportType,
-} from "./transports/base.js";
-import { HTTPTransport } from "./transports/http.js";
-import { StdioTransport } from "./transports/stdio.js";
+} from "@core/transports/base";
+import { HTTPTransport } from "@core/transports/http";
+import { StdioTransport } from "@core/transports/stdio";
 
 /**
  * 传输层管理器
