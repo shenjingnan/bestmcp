@@ -1,11 +1,10 @@
+import { notFound } from "next/navigation";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 import { useMDXComponents as getMDXComponents } from "../../mdx-components";
-import { notFound } from "next/navigation";
 
 // 只在生产环境生成静态参数
-export const generateStaticParams = process.env.NODE_ENV === "production"
-  ? generateStaticParamsFor("mdxPath")
-  : () => [];
+export const generateStaticParams =
+  process.env.NODE_ENV === "production" ? generateStaticParamsFor("mdxPath") : () => [];
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -15,7 +14,7 @@ export async function generateMetadata(props) {
     try {
       const { metadata } = await importPage([]);
       return metadata;
-    } catch (error) {
+    } catch (_error) {
       return {};
     }
   }
@@ -24,7 +23,7 @@ export async function generateMetadata(props) {
   try {
     const { metadata } = await importPage(params.mdxPath);
     return metadata;
-  } catch (error) {
+  } catch (_error) {
     return {};
   }
 }
@@ -43,7 +42,7 @@ export default async function Page(props) {
           <MDXContent {...props} params={params} />
         </Wrapper>
       );
-    } catch (error) {
+    } catch (_error) {
       return notFound();
     }
   }
@@ -56,7 +55,7 @@ export default async function Page(props) {
         <MDXContent {...props} params={params} />
       </Wrapper>
     );
-  } catch (error) {
+  } catch (_error) {
     return notFound();
   }
 }
