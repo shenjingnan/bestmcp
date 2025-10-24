@@ -1,8 +1,7 @@
 import type { Server } from "@core/internal/mcp-sdk";
 import { StdioServerTransport } from "@core/internal/mcp-sdk";
-import { TransportType } from "@core/transports/base";
-import type { StdioTransportConfig } from "@core/transports/stdio";
-import { StdioTransport } from "@core/transports/stdio";
+import type { StdioTransportConfig } from "@core/transports";
+import { StdioTransport, TransportType } from "@core/transports";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock console methods to avoid noise in tests

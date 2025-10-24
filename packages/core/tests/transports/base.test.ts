@@ -1,6 +1,6 @@
 import type { Server, Transport } from "@core/internal/mcp-sdk";
-import type { TransportConfig } from "@core/transports/base";
-import { BaseTransport, TransportType } from "@core/transports/base";
+import type { TransportConfig } from "@core/transports";
+import { BaseTransport, TransportType } from "@core/transports";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // 创建一个具体的 BaseTransport 实现用于测试
