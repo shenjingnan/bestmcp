@@ -122,6 +122,37 @@ pnpm spell:check
 
 ## 开发指导
 
+### Import 规范
+
+项目强制要求 **类型导入** 和 **值导入** 分离，以提高代码的可读性和类型安全性：
+
+#### ✅ 正确的写法
+
+```typescript
+// 类型导入使用 import type
+import type { User, Config } from "./types";
+import type { ToolMetadata } from "@core/types";
+
+// 值导入使用普通 import
+import { createUser, validateUser } from "./user-service";
+import { z } from "zod";
+```
+
+#### ❌ 错误的写法
+
+```typescript
+// 不允许混合导入
+import { createUser, type User, type Config } from "./user-service";
+import { z, type ZodSchema } from "zod";
+```
+
+#### 配置说明
+
+- **TypeScript**: `tsconfig.json` 中启用了 `"verbatimModuleSyntax": true`
+- **Biome**: `biome.json` 中配置了 `"useImportType": { "style": "separatedType" }`
+- **自动修复**: 使用 `pnpm check:fix` 可以自动修复大部分导入问题
+- **导入顺序**: Biome 会自动将类型导入排在值导入之前
+
 ### TypeScript 配置要求
 
 项目启用了以下 TypeScript 特性：
@@ -129,6 +160,7 @@ pnpm spell:check
 - `experimentalDecorators: true` - 启用装饰器支持
 - `emitDecoratorMetadata: true` - 启用装饰器元数据
 - `strict: true` - 严格类型检查
+- `verbatimModuleSyntax: true` - 强制类型和值导入分离
 
 ### 测试框架
 

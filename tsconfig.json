@@ -22,6 +22,7 @@
     "declarationMap": true,
     "composite": true,
     "baseUrl": ".",
+    "verbatimModuleSyntax": true,
     "paths": {
       "@core/*": ["packages/core/src/*"],
       "@bestmcp/core": ["packages/core/src"],

@@ -35,7 +35,12 @@
         "noExplicitAny": "error"
       },
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useImportType": {
+          "options": {
+            "style": "separatedType"
+          }
+        }
       },
       "a11y": {
         "noSvgWithoutTitle": "off"
