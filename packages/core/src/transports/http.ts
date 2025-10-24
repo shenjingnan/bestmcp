@@ -1,8 +1,8 @@
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
 import type { Server, StreamableHTTPServerTransportOptions, Transport } from "@core/internal/mcp-sdk";
 import { StreamableHTTPServerTransport } from "@core/internal/mcp-sdk";
-import type { HTTPTransportConfig } from "./base.js";
-import { BaseTransport, TransportType } from "./base.js";
+import type { HTTPTransportConfig } from "@core/transports/base";
+import { BaseTransport, TransportType } from "@core/transports/base";
 
 /**
  * HTTP 传输层实现
