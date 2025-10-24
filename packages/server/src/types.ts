@@ -1,4 +1,4 @@
-import type { ServerCapabilities } from "@core/internal/mcp-sdk";
+import type { ServerCapabilities } from "@server/internal/mcp-sdk";
 import type { z } from "zod";
 
 // 类型定义

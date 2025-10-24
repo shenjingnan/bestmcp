@@ -1,4 +1,4 @@
-import type { Server, Transport } from "@core/internal/mcp-sdk";
+import type { Server, Transport } from "@server/internal/mcp-sdk";
 
 /**
  * 传输层类型枚举

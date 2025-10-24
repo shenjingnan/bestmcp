@@ -1,4 +1,4 @@
-import { ToolNotFoundError, ToolValidationError, ZodValidationError } from "@core/errors";
+import { ToolNotFoundError, ToolValidationError, ZodValidationError } from "@server/errors";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 

@@ -1,7 +1,7 @@
 import "reflect-metadata";
-import type { ToolMetadata } from "@core/types";
-import { TOOL_PARAM_METADATA, TOOLS_METADATA } from "@core/types";
-import { extractParameters, getParamNames, isZodSchemaOptional } from "@core/validation";
+import type { ToolMetadata } from "@server/types";
+import { TOOL_PARAM_METADATA, TOOLS_METADATA } from "@server/types";
+import { extractParameters, getParamNames, isZodSchemaOptional } from "@server/validation";
 import type { z } from "zod";
 
 // 工具装饰器

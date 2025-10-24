@@ -6,8 +6,8 @@ export default defineConfig({
     include: ["packages/**/*.test.ts"],
     environment: "node",
     alias: {
-      "@core": path.resolve(__dirname, "packages/core/src"),
-      "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
+      "@server": path.resolve(__dirname, "packages/server/src"),
+      "@bestmcp/core": path.resolve(__dirname, "packages/server/src"),
       bestmcp: path.resolve(__dirname, "src"),
     },
     resolveSnapshotPath: (testPath, snapExtension) => {
@@ -21,8 +21,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@core": path.resolve(__dirname, "packages/core/src"),
-      "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
+      "@server": path.resolve(__dirname, "packages/server/src"),
+      "@bestmcp/core": path.resolve(__dirname, "packages/server/src"),
       bestmcp: path.resolve(__dirname, "src"),
     },
   },
