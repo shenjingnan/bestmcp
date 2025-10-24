@@ -1,0 +1,225 @@
+# 为什么我们使用别名导入导出
+
+在 BestMCP 项目中，我们广泛使用 TypeScript 路径别名来简化模块导入。当你查看源码时，会发现几乎所有文件都使用别名进行导入/导出，而不是相对路径。
+
+```ts
+import { ToolNotFoundError, ToolValidationError } from "@core/errors";
+import type { ToolMetadata } from "@core/types";
+import { BestMCP, Tool, Param } from "bestmcp";
+```
+
+## 为什么使用别名
+
+### 1. **代码可维护性**
+
+别名提供了稳定的导入路径，不随文件位置变化而改变。当你重构代码、移动文件或重组目录结构时，使用别名的导入语句无需修改。
+
+**相对路径的问题：**
+```ts
+// ❌ 使用相对路径 - 脆弱且难以维护
+import { Server } from "../../../server";
+import { validateSchema } from "../utils/validation";
+import { TransportManager } from "./transport-manager";
+```
+
+**别名的优势：**
+```ts
+// ✅ 使用别名 - 稳定且清晰
+import { Server } from "@core/server";
+import { validateSchema } from "@core/utils/validation";
+import { TransportManager } from "@core/transport-manager";
+```
+
+### 2. **提高代码可读性**
+
+别名让导入路径更加语义化，能够清楚地表明模块的来源和用途：
+
+- `@core/*` - 来源于核心库的模块
+- `@bestmcp/core` - 核心库的主入口
+- `bestmcp` - 根级别包的公共 API
+
+### 3. **避免相对路径混乱**
+
+在复杂的 monorepo 结构中，相对路径可能变得非常复杂且难以理解：
+
+```ts
+// 没有别名时可能出现的情况
+import { SomeClass } from "../../../../../packages/core/src/utils/some-class";
+```
+
+使用别名后，这种混乱的情况被完全消除。
+
+### 4. **重构友好**
+
+当你需要将代码块复制到其他文件，或者批量移动文件时，别名导入不需要任何修改，而相对路径导入则需要手动调整每个路径。
+
+## 我们的别名系统
+
+BestMCP 项目使用以下三种主要别名：
+
+### `@core/*`
+
+**映射关系：**
+```json
+"@core/*": ["packages/core/src/*"]
+```
+
+**用途：** 用于核心库内部模块的绝对路径导入
+
+**使用场景：**
+```ts
+// 核心库内部模块之间的导入
+import { Server } from "@core/server";
+import { TransportManager } from "@core/transport-manager";
+import { validateSchema } from "@core/utils/validation";
+import { ToolNotFoundError } from "@core/errors";
+import type { ToolMetadata } from "@core/types";
+```
+
+### `@bestmcp/core`
+
+**映射关系：**
+```json
+"@bestmcp/core": ["packages/core/src"]
+```
+
+**用途：** 核心库的主入口点，用于从外部导入核心库
+
+**使用场景：**
+```ts
+// 从根级别或示例项目中导入核心库
+import * as BestMCP from "@bestmcp/core";
+import { BestMCP as BestMCPClass } from "@bestmcp/core";
+```
+
+### `bestmcp`
+
+**映射关系：**
+```json
+"bestmcp": ["src"]
+```
+
+**用途：** 根级别包的入口，主要用于示例项目和外部使用
+
+**使用场景：**
+```ts
+// 示例项目中的导入
+import { BestMCP, Tool, Param } from "bestmcp";
+```
+
+## 配置说明
+
+### TypeScript 配置 (tsconfig.json)
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["packages/core/src/*"],
+      "@bestmcp/core": ["packages/core/src"],
+      "@bestmcp/core/*": ["packages/core/src/*"],
+      "bestmcp": ["src"],
+      "bestmcp/*": ["src/*"]
+    }
+  }
+}
+```
+
+### Vitest 配置 (vitest.config.ts)
+
+```typescript
+export default defineConfig({
+  test: {
+    alias: {
+      "@core": path.resolve(__dirname, "packages/core/src"),
+      "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
+      bestmcp: path.resolve(__dirname, "src"),
+    },
+  },
+  resolve: {
+    alias: {
+      "@core": path.resolve(__dirname, "packages/core/src"),
+      "@bestmcp/core": path.resolve(__dirname, "packages/core/src"),
+      bestmcp: path.resolve(__dirname, "src"),
+    },
+  },
+});
+```
+
+## 添加新别名
+
+如果你需要添加新的路径别名，需要同时修改以下文件：
+
+### 1. 更新 TypeScript 配置
+
+在 `tsconfig.json` 中添加新的路径映射：
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      // 现有别名...
+      "@new-alias/*": ["path/to/new/module/*"]
+    }
+  }
+}
+```
+
+### 2. 更新 Vitest 配置
+
+在 `vitest.config.ts` 中添加对应的别名解析：
+
+```typescript
+export default defineConfig({
+  test: {
+    alias: {
+      // 现有别名...
+      "@new-alias": path.resolve(__dirname, "path/to/new/module"),
+    },
+  },
+  resolve: {
+    alias: {
+      // 现有别名...
+      "@new-alias": path.resolve(__dirname, "path/to/new/module"),
+    },
+  },
+});
+```
+
+### 3. 验证配置
+
+运行以下命令确保配置正确：
+
+```bash
+# 类型检查
+pnpm type:check
+
+# 运行测试
+pnpm test
+
+# 代码格式检查
+pnpm check:fix
+```
+
+## 最佳实践
+
+### 1. **保持一致性**
+
+在整个项目中保持别名使用的一致性，不要混用相对路径和别名导入。
+
+### 2. **语义化命名**
+
+选择能够清楚表达模块用途的别名名称。
+
+### 3. **避免过度嵌套**
+
+不要创建过于深层或复杂的别名结构。
+
+### 4. **文档同步**
+
+当你添加新别名时，记得更新相关文档和配置说明。
+
+### 5. **IDE 支持**
+
+确保你的 IDE 支持 TypeScript 路径别名配置，大多数现代 IDE (如 VS Code) 会自动识别 `tsconfig.json` 中的路径配置。

@@ -1,9 +1,8 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Server } from "@core/internal/mcp-sdk";
 import { StreamableHTTPServerTransport } from "@core/internal/mcp-sdk";
-import type { HTTPTransportConfig } from "@core/transports/base";
-import { TransportType } from "@core/transports/base";
-import { HTTPTransport } from "@core/transports/http";
+import type { HTTPTransportConfig } from "@core/transports";
+import { HTTPTransport, TransportType } from "@core/transports";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock node:http module

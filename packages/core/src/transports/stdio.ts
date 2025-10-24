@@ -1,6 +1,7 @@
 import type { Server, Transport } from "@core/internal/mcp-sdk";
 import { StdioServerTransport } from "@core/internal/mcp-sdk";
-import { BaseTransport, type TransportConfig, TransportType } from "@core/transports/base";
+import type { TransportConfig } from "@core/transports";
+import { BaseTransport, TransportType } from "@core/transports";
 
 /**
  * Stdio 传输层配置

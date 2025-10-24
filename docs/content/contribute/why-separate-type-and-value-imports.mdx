@@ -1,0 +1,264 @@
+# 为什么导入导出时将类型和值分开
+
+在 BestMCP 项目中，我们严格要求将类型导入和值导入分开写。这是 TypeScript 官方推荐的最佳实践，也是我们项目的重要代码风格规范。
+
+## 示例对比
+
+### ❌ 混合导入（不允许）
+
+```typescript
+// 不推荐的混合导入方式
+import { Server, type IncomingMessage, type ServerResponse } from "node:http";
+import { z, type ZodSchema } from "zod";
+import { ToolNotFoundError, type ToolMetadata } from "@core/errors";
+```
+
+### ✅ 分离导入（推荐）
+
+```typescript
+// 类型导入使用 import type
+import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
+import type { CallToolRequest, CallToolResult, Tool as McpSdkTool } from "@core/internal/mcp-sdk";
+import type { BaseTransport, HTTPTransport, HTTPTransportConfig, TransportConfig } from "@core/transports";
+import type { BestMCPConfig, JsonSchema, ParamTypeMetadata, RunOptions, ToolExecutor, ToolMetadata } from "@core/types";
+import type { z } from "zod";
+
+// 值导入使用普通 import
+import "reflect-metadata";
+import { ToolNotFoundError, ToolValidationError, ZodValidationError } from "@core/errors";
+import { CallToolRequestSchema, ListToolsRequestSchema, Server } from "@core/internal/mcp-sdk";
+import { TransportManager } from "@core/transport-manager";
+import { TransportType } from "@core/transports";
+import { TOOL_PARAM_METADATA, TOOLS_METADATA } from "@core/types";
+```
+
+## 为什么选择分离导入
+
+### 1. **代码意图更明确**
+
+分离导入让你一眼就能看出：
+
+- **哪些是类型定义**：只在编译时存在，运行时会被移除
+- **哪些是实际值**：会成为构建产物的一部分，运行时可用
+
+```typescript
+// 一眼就能看出这些都是类型
+import type { UserConfig, ApiResponse, HttpMethod } from "./types";
+
+// 一眼就能看出这些都是实际的函数和类
+import { createUser, validateRequest, HttpClient } from "./services";
+```
+
+### 2. **减少构建产物体积**
+
+TypeScript 编译器会完全移除类型导入，这有助于：
+
+- **减小打包体积**：类型信息不会出现在最终的 JavaScript 文件中
+- **提升加载性能**：更少的代码意味着更快的下载和解析
+- **优化 tree-shaking**：更容易识别未使用的代码
+
+```typescript
+// 这些类型在编译后完全消失
+import type { User, Product, Order } from "./types";
+
+// 只有这些值会保留在最终代码中
+import { createUser, createProduct, createOrder } from "./factories";
+```
+
+### 3. **避免运行时误用**
+
+明确区分类型和值可以防止一些常见的错误：
+
+```typescript
+import type { User } from "./types";
+import { User as UserClass } from "./models";
+
+// ✅ 正确：User 是类型，用于类型注解
+function processUser(user: User): void {
+  // ✅ 正确：UserClass 是值，可以实例化
+  const instance = new UserClass(user);
+  // ...
+}
+```
+
+### 4. **更好的 IDE 支持**
+
+分离导入为 IDE 提供了更精确的信息：
+
+- **更好的自动补全**：IDE 能更准确地区分类型和值
+- **更清晰的文档提示**：鼠标悬停时显示的信息更准确
+- **更可靠的重构**：重命名和重构操作更安全
+
+### 5. **符合现代 TypeScript 标准**
+
+这是 TypeScript 社区的推荐做法：
+
+- **官方推荐**：TypeScript 官方文档推荐使用分离导入
+- **生态标准**：大多数现代 TypeScript 项目都采用这种风格
+- **工具支持**：主流工具（ESLint、Prettier、Biome）都支持这种模式
+
+## 技术原理
+
+### 编译过程
+
+```typescript
+// 源代码
+import type { User, Config } from "./types";
+import { createUser, validateConfig } from "./utils";
+
+function main() {
+  const config: Config = { /* ... */ };
+  const user = createUser(config);
+  return user;
+}
+```
+
+```javascript
+// 编译后的 JavaScript（类型被移除）
+import { createUser, validateConfig } from "./utils";
+
+function main() {
+  const config = { /* ... */ };
+  const user = createUser(config);
+  return user;
+}
+```
+
+### import type 的特性
+
+- **编译时移除**：`import type` 语句在编译后被完全删除
+- **零运行时开销**：不会产生任何运行时代码
+- **类型安全**：仍然提供完整的类型检查
+- **模块标识符验证**：仍然验证模块路径的正确性
+
+## 项目配置
+
+### TypeScript 配置
+
+我们在 `tsconfig.json` 中启用了严格模式：
+
+```json
+{
+  "compilerOptions": {
+    "verbatimModuleSyntax": true
+  }
+}
+```
+
+这个配置强制要求类型和值导入分离，如果混合导入会导致编译错误。
+
+### Biome 配置
+
+在 `biome.json` 中我们配置了相应的代码风格规则：
+
+```json
+{
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "style": {
+        "useImportType": {
+          "options": {
+            "style": "separatedType"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## 实际应用示例
+
+### 在工具定义中
+
+```typescript
+// ✅ 正确的写法
+import type { Tool, ToolMetadata } from "@core/types";
+import type { z } from "zod";
+
+import { BestMCP } from "@core/server";
+import { z } from "zod";
+
+class CalculatorService {
+  @Tool("执行数学计算")
+  calculate(
+    @Param(z.number(), "第一个数字") a: number,
+    @Param(z.number(), "第二个数字") b: number,
+    @Param(z.enum(["add", "subtract", "multiply", "divide"]), "运算类型") operation: string
+  ): number {
+    // 实现逻辑
+  }
+}
+```
+
+### 在测试文件中
+
+```typescript
+// ✅ 正确的写法
+import type { BestMCPConfig } from "@core/types";
+import type { vi } from "vitest";
+
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { BestMCP } from "@core/server";
+
+describe("BestMCP 服务器", () => {
+  let mcp: BestMCP;
+
+  beforeEach(() => {
+    const config: BestMCPConfig = {
+      name: "test-server",
+      version: "1.0.0"
+    };
+    mcp = new BestMCP(config);
+  });
+
+  // 测试用例...
+});
+```
+
+## 常见问题和解决方案
+
+### Q: 为什么不能写成 `import { type User, createUser }`？
+
+A: 虽然语法上允许，但我们选择完全分离的写法。这样更清晰，也更符合项目的严格风格要求。
+
+### Q: 如果一个东西既是类型又是值怎么办？
+
+A: 某些标识符（如类、枚举）既是类型又是值：
+
+```typescript
+// ✅ 正确：用值导入
+import { User, UserService } from "./models";
+
+// 然后可以用作类型
+function processUser(user: User): void {
+  // User 既是类型（用于类型注解）又是值（可以实例化）
+}
+```
+
+### Q: 如何处理第三方库的导入？
+
+A: 同样遵循分离原则：
+
+```typescript
+// ✅ 正确
+import type { Express, Request, Response } from "express";
+import express from "express";
+import { Router } from "express";
+```
+
+## 工具支持
+
+### 自动排序
+
+我们的工具配置会自动将类型导入排在值导入之前：
+
+```typescript
+// 工具会自动整理成这样
+import type { Config, User, ApiResponse } from "./types";
+import type { z } from "zod";
+
+import { createConfig, createUser, makeRequest } from "./services";
+import { express } from "express";
+```

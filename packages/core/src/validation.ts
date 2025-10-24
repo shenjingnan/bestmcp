@@ -1,4 +1,5 @@
-import { type JsonSchema, type ParamTypeMetadata, TOOL_PARAM_METADATA } from "@core/types";
+import type { JsonSchema, ParamTypeMetadata } from "@core/types";
+import { TOOL_PARAM_METADATA } from "@core/types";
 import { z } from "zod";
 
 // 参数名提取函数

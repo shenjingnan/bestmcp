@@ -1,5 +1,6 @@
 import "reflect-metadata";
-import { TOOL_PARAM_METADATA, TOOLS_METADATA, type ToolMetadata } from "@core/types";
+import type { ToolMetadata } from "@core/types";
+import { TOOL_PARAM_METADATA, TOOLS_METADATA } from "@core/types";
 import { extractParameters, getParamNames, isZodSchemaOptional } from "@core/validation";
 import type { z } from "zod";
 
