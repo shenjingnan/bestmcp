@@ -1,7 +1,6 @@
 import type { Server } from "@core/internal/mcp-sdk";
 import { StdioServerTransport } from "@core/internal/mcp-sdk";
-import type { StdioTransportConfig } from "@core/transports";
-import { StdioTransport, TransportType } from "@core/transports";
+import { StdioTransport, TransportType, type TransportConfig } from "@core/transports";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock console methods to avoid noise in tests
@@ -171,7 +170,7 @@ describe("StdioTransport", () => {
 
   describe("StdioTransportConfig", () => {
     it("应该正确创建配置对象", () => {
-      const config: StdioTransportConfig = {
+      const config: TransportConfig = {
         type: TransportType.STDIO,
         options: { test: "value" },
       };
@@ -181,7 +180,7 @@ describe("StdioTransport", () => {
     });
 
     it("选项应该是可选的", () => {
-      const config: StdioTransportConfig = {
+      const config: TransportConfig = {
         type: TransportType.STDIO,
       };
 

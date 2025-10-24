@@ -1,3 +1,4 @@
-export { BaseTransport, type HTTPTransportConfig, type TransportConfig, TransportType } from "./base.js";
-export { HTTPTransport } from "./http.js";
-export { StdioTransport } from "./stdio.js";
+export type { HTTPTransportConfig, TransportConfig } from "./base";
+export { BaseTransport, TransportType } from "./base";
+export { HTTPTransport } from "./http";
+export { StdioTransport } from "./stdio";
