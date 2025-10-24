@@ -5,7 +5,7 @@ const client = new BestMCPClient({});
 client.registry("stdio-mcp", {
   command: "node",
   args: [
-    "/Users/nemo/github/shenjingnan/bestmcp/examples/stdio-mcp/dist/index.js",
+    "/path/to/your/stdio-mcp/dist/index.js",
   ],
 });
 
