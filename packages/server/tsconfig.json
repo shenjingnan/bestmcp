@@ -12,7 +12,7 @@
     "baseUrl": ".",
     "verbatimModuleSyntax": true,
     "paths": {
-      "@core/*": ["./src/*"]
+      "@server/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"],

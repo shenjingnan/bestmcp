@@ -1,1 +1,1 @@
-export * from "@bestmcp/core";
+export * from "packages/server/src";

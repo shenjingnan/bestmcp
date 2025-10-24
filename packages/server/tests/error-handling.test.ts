@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import "reflect-metadata";
-import { Param, Tool } from "@core/decorators";
-import { ToolNotFoundError, ToolValidationError } from "@core/errors";
-import { BestMCP } from "@core/server";
+import { Param, Tool } from "@server/decorators";
+import { ToolNotFoundError, ToolValidationError } from "@server/errors";
+import { BestMCP } from "@server/server";
 import { z } from "zod";
 
 // Mock console methods to avoid noise in tests

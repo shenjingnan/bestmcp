@@ -6,7 +6,7 @@ import {
   inferTypeSchema,
   isZodSchemaOptional,
   zodSchemaToJsonSchema,
-} from "@core/validation";
+} from "@server/validation";
 import { z } from "zod";
 
 describe("获取参数名称", () => {

@@ -1,8 +1,8 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import type { Server } from "@core/internal/mcp-sdk";
-import { StreamableHTTPServerTransport } from "@core/internal/mcp-sdk";
-import type { HTTPTransportConfig } from "@core/transports";
-import { HTTPTransport, TransportType } from "@core/transports";
+import type { Server } from "@server/internal/mcp-sdk";
+import { StreamableHTTPServerTransport } from "@server/internal/mcp-sdk";
+import type { HTTPTransportConfig } from "@server/transports";
+import { HTTPTransport, TransportType } from "@server/transports";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock node:http module
@@ -16,7 +16,7 @@ vi.mock("node:http", () => ({
 }));
 
 // Mock StreamableHTTPServerTransport
-vi.mock("@core/internal/mcp-sdk", () => ({
+vi.mock("@server/internal/mcp-sdk", () => ({
   StreamableHTTPServerTransport: vi.fn(),
 }));
 
@@ -85,7 +85,7 @@ describe("HTTPTransport", () => {
     };
 
     // Mock StreamableHTTPServerTransport constructor
-    const { StreamableHTTPServerTransport } = await import("@core/internal/mcp-sdk");
+    const { StreamableHTTPServerTransport } = await import("@server/internal/mcp-sdk");
     vi.mocked(StreamableHTTPServerTransport).mockImplementation(() => {
       return mockStreamableTransport as StreamableHTTPServerTransport;
     });

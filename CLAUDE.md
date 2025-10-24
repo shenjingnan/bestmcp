@@ -54,7 +54,7 @@ pnpm test:coverage
 pnpm test:watch
 
 # 运行特定测试文件
-pnpm test packages/core/tests/server.test.ts
+pnpm test packages/server/tests/server.test.ts
 ```
 
 ### 代码质量
@@ -71,7 +71,7 @@ pnpm spell:check
 
 ### 整体结构
 
-这是一个 **monorepo** 项目，使用 pnpm workspace 管理。核心代码位于 `packages/core/` 目录中。
+这是一个 **monorepo** 项目，使用 pnpm workspace 管理。核心代码位于 `packages/server/` 目录中。
 
 ### 核心模块
 
@@ -131,7 +131,7 @@ pnpm spell:check
 ```typescript
 // 类型导入使用 import type
 import type { User, Config } from "./types";
-import type { ToolMetadata } from "@core/types";
+import type { ToolMetadata } from "@server/types";
 
 // 值导入使用普通 import
 import { createUser, validateUser } from "./user-service";
@@ -165,7 +165,7 @@ import { z, type ZodSchema } from "zod";
 ### 测试框架
 
 - 使用 **Vitest** 作为测试框架
-- 测试文件位于 `packages/core/tests/` 目录
+- 测试文件位于 `packages/server/tests/` 目录
 - 测试覆盖率报告可通过 `pnpm test:coverage` 生成
 - 所有测试用例应使用中文描述
 

@@ -1,1 +1,1 @@
-export type * from "@bestmcp/core/types";
+export type * from "@server/types";

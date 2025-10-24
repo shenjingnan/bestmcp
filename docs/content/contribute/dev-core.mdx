@@ -20,7 +20,7 @@ pnpm dev
 ## 项目结构
 
 ```
-packages/core/
+packages/server/
 ├── src/
 │   ├── index.ts          # 主入口
 │   ├── server.ts         # BestMCP 主类
@@ -38,7 +38,7 @@ packages/core/
 
 ### 1. 修改代码
 
-在 `packages/core/src/` 中修改框架代码，开发模式会自动重新构建。
+在 `packages/server/src/` 中修改框架代码，开发模式会自动重新构建。
 
 ### 2. 测试验证
 
@@ -74,7 +74,7 @@ pnpm spell:check
 
 ### 单元测试
 
-在 `packages/core/tests/` 中添加测试文件：
+在 `packages/server/tests/` 中添加测试文件：
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -185,7 +185,7 @@ console.log('调试信息:', data);
   "type": "node",
   "request": "launch",
   "name": "Debug BestMCP",
-  "program": "${workspaceFolder}/packages/core/src/index.ts",
-  "outFiles": ["${workspaceFolder}/packages/core/dist/**/*.js"]
+  "program": "${workspaceFolder}/packages/server/src/index.ts",
+  "outFiles": ["${workspaceFolder}/packages/server/dist/**/*.js"]
 }
 ```

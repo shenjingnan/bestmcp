@@ -1,7 +1,7 @@
-import type { Server, Transport } from "@core/internal/mcp-sdk";
-import { TransportManager } from "@core/transport-manager";
-import type { HTTPTransportConfig, TransportConfig } from "@core/transports";
-import { HTTPTransport, StdioTransport, TransportType } from "@core/transports";
+import type { Server, Transport } from "@server/internal/mcp-sdk";
+import { TransportManager } from "@server/transport-manager";
+import type { HTTPTransportConfig, TransportConfig } from "@server/transports";
+import { HTTPTransport, StdioTransport, TransportType } from "@server/transports";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock console methods to avoid noise in tests

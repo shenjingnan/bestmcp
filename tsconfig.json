@@ -24,9 +24,9 @@
     "baseUrl": ".",
     "verbatimModuleSyntax": true,
     "paths": {
-      "@core/*": ["packages/core/src/*"],
-      "@bestmcp/core": ["packages/core/src"],
-      "@bestmcp/core/*": ["packages/core/src/*"],
+      "@server/*": ["packages/server/src/*"],
+      "@bestmcp/core": ["packages/server/src"],
+      "@bestmcp/core/*": ["packages/server/src/*"],
       "bestmcp": ["src"],
       "bestmcp/*": ["src/*"]
     }

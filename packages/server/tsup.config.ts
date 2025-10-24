@@ -38,5 +38,5 @@ export default defineConfig({
       log: () => {},
     },
   },
-  onSuccess: 'echo "✅ packages/core 构建完成"',
+  onSuccess: 'echo "✅ packages/server 构建完成"',
 });

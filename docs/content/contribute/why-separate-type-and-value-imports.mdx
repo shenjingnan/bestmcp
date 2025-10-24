@@ -10,7 +10,7 @@
 // 不推荐的混合导入方式
 import { Server, type IncomingMessage, type ServerResponse } from "node:http";
 import { z, type ZodSchema } from "zod";
-import { ToolNotFoundError, type ToolMetadata } from "@core/errors";
+import { ToolNotFoundError, type ToolMetadata } from "@server/errors";
 ```
 
 ### ✅ 分离导入（推荐）
@@ -18,18 +18,18 @@ import { ToolNotFoundError, type ToolMetadata } from "@core/errors";
 ```typescript
 // 类型导入使用 import type
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
-import type { CallToolRequest, CallToolResult, Tool as McpSdkTool } from "@core/internal/mcp-sdk";
-import type { BaseTransport, HTTPTransport, HTTPTransportConfig, TransportConfig } from "@core/transports";
-import type { BestMCPConfig, JsonSchema, ParamTypeMetadata, RunOptions, ToolExecutor, ToolMetadata } from "@core/types";
+import type { CallToolRequest, CallToolResult, Tool as McpSdkTool } from "@server/internal/mcp-sdk";
+import type { BaseTransport, HTTPTransport, HTTPTransportConfig, TransportConfig } from "@server/transports";
+import type { BestMCPConfig, JsonSchema, ParamTypeMetadata, RunOptions, ToolExecutor, ToolMetadata } from "@server/types";
 import type { z } from "zod";
 
 // 值导入使用普通 import
 import "reflect-metadata";
-import { ToolNotFoundError, ToolValidationError, ZodValidationError } from "@core/errors";
-import { CallToolRequestSchema, ListToolsRequestSchema, Server } from "@core/internal/mcp-sdk";
-import { TransportManager } from "@core/transport-manager";
-import { TransportType } from "@core/transports";
-import { TOOL_PARAM_METADATA, TOOLS_METADATA } from "@core/types";
+import { ToolNotFoundError, ToolValidationError, ZodValidationError } from "@server/errors";
+import { CallToolRequestSchema, ListToolsRequestSchema, Server } from "@server/internal/mcp-sdk";
+import { TransportManager } from "@server/transport-manager";
+import { TransportType } from "@server/transports";
+import { TOOL_PARAM_METADATA, TOOLS_METADATA } from "@server/types";
 ```
 
 ## 为什么选择分离导入
@@ -174,10 +174,10 @@ function main() {
 
 ```typescript
 // ✅ 正确的写法
-import type { Tool, ToolMetadata } from "@core/types";
+import type { Tool, ToolMetadata } from "@server/types";
 import type { z } from "zod";
 
-import { BestMCP } from "@core/server";
+import { BestMCP } from "@server/server";
 import { z } from "zod";
 
 class CalculatorService {
@@ -196,11 +196,11 @@ class CalculatorService {
 
 ```typescript
 // ✅ 正确的写法
-import type { BestMCPConfig } from "@core/types";
+import type { BestMCPConfig } from "@server/types";
 import type { vi } from "vitest";
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { BestMCP } from "@core/server";
+import { BestMCP } from "@server/server";
 
 describe("BestMCP 服务器", () => {
   let mcp: BestMCP;
