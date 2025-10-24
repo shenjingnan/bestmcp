@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.6](https://github.com/shenjingnan/bestmcp/compare/v0.0.5...v0.0.6) (2025-10-24)
+
+### Features
+
+* **ci:** 添加 Renovate 自动依赖更新配置 ([#5](https://github.com/shenjingnan/bestmcp/issues/5)) ([2968672](https://github.com/shenjingnan/bestmcp/commit/296867270052b4d9cbb2b0920fa4e2b92e36df85))
+* **docs:** 升级文档系统架构 ([#6](https://github.com/shenjingnan/bestmcp/issues/6)) ([fafbb40](https://github.com/shenjingnan/bestmcp/commit/fafbb40b569eeeda9dee7bb4091026b03a17dd0f))
+
+### Bug Fixes
+
+* **examples:** 为示例项目添加完整的参数验证 ([#4](https://github.com/shenjingnan/bestmcp/issues/4)) ([0559a8b](https://github.com/shenjingnan/bestmcp/commit/0559a8ba752442b69906d99c6ac497daa144c694))
+
 ## [0.0.5](https://github.com/shenjingnan/bestmcp/compare/v0.0.5-beta.0...v0.0.5) (2025-10-21)
 
 ## [0.0.5-beta.0](https://github.com/shenjingnan/bestmcp/compare/v0.0.4...v0.0.5-beta.0) (2025-10-21)
