@@ -1,5 +1,5 @@
-import { Client } from '@bestmcp/client';
-import { resolve } from 'path';
+import { resolve } from "node:path";
+import { Client } from "@bestmcp/client";
 
 async function main() {
   // 创建客户端实例
@@ -14,7 +14,7 @@ async function main() {
   // 获取工具列表
   const tools = await client.listTools();
   console.log(JSON.stringify(tools, null, 2));
-  
+
   // 断开连接
   client.disconnect();
 }

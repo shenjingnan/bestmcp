@@ -93,15 +93,6 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
 
-  examples/client/client-demo:
-    dependencies:
-      '@bestmcp/client':
-        specifier: workspace:*
-        version: link:../../../packages/client
-      zod:
-        specifier: ^3.25.0
-        version: 3.25.76
-
   examples/client/connect-single-mcp:
     dependencies:
       '@bestmcp/client':
@@ -110,6 +101,15 @@ importers:
       cross-spawn:
         specifier: ^7.0.6
         version: 7.0.6
+
+  examples/client/use-bestmcp-client-to-connect-single-mcp:
+    dependencies:
+      '@bestmcp/client':
+        specifier: workspace:*
+        version: link:../../../packages/client
+      zod:
+        specifier: ^3.25.0
+        version: 3.25.76
 
   examples/http-mcp:
     dependencies:

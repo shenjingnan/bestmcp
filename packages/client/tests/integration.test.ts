@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { Client, BestMCPClient, MCPConnectionError } from "../src/index";
+import { BestMCPClient, Client, MCPConnectionError } from "../src/index";
 
 // Mock @modelcontextprotocol/sdk
 vi.mock("@modelcontextprotocol/sdk/client/index.js", () => ({
@@ -187,7 +187,7 @@ describe("集成测试", () => {
       expect(manager.listClients()).not.toContain("temp-server");
 
       // 等待断开连接完成
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       expect(manager.isServerConnected("temp-server")).toBe(false);
     });
 
