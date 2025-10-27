@@ -34,10 +34,20 @@ vi.mock("@modelcontextprotocol/sdk/client/stdio.js", () => ({
 const { Client } = await import("@modelcontextprotocol/sdk/client/index.js");
 const { StdioClientTransport } = await import("@modelcontextprotocol/sdk/client/stdio.js");
 
+interface MockClient {
+  connect: ReturnType<typeof vi.fn>;
+  listTools: ReturnType<typeof vi.fn>;
+  callTool: ReturnType<typeof vi.fn>;
+}
+
+interface MockTransport {
+  close: ReturnType<typeof vi.fn>;
+}
+
 describe("BestMCPClient", () => {
   let client: BestMCPClient;
-  let mockClient: any;
-  let mockTransport: any;
+  let mockClient: MockClient;
+  let mockTransport: MockTransport;
 
   beforeEach(() => {
     client = new BestMCPClient();
@@ -69,8 +79,8 @@ describe("BestMCPClient", () => {
     };
 
     // Mock 构造函数
-    vi.mocked(Client).mockImplementation(() => mockClient);
-    vi.mocked(StdioClientTransport).mockImplementation(() => mockTransport);
+    vi.mocked(Client).mockImplementation(() => mockClient as never);
+    vi.mocked(StdioClientTransport).mockImplementation(() => mockTransport as never);
   });
 
   afterEach(() => {

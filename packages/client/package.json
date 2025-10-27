@@ -2,14 +2,14 @@
   "name": "@bestmcp/client",
   "version": "0.0.1",
   "description": "BestMCP 客户端库",
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.mjs"
+      "require": "./dist/index.js"
     }
   },
   "files": [
