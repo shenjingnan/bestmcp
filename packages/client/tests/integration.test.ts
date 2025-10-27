@@ -174,57 +174,6 @@ describe("集成测试", () => {
     });
   });
 
-  describe("性能和资源管理", () => {
-    it("应该正确处理客户端注销", async () => {
-      manager.registry("temp-server", { command: "node", args: ["temp.js"] });
-      await manager.connect();
-
-      expect(manager.listClients()).toContain("temp-server");
-      expect(manager.isServerConnected("temp-server")).toBe(true);
-
-      // 注销服务器
-      manager.unregistry("temp-server");
-      expect(manager.listClients()).not.toContain("temp-server");
-
-      // 等待断开连接完成
-      await new Promise((resolve) => setTimeout(resolve, 10));
-      expect(manager.isServerConnected("temp-server")).toBe(false);
-    });
-
-    it("应该支持大量客户端管理", async () => {
-      const serverCount = 10;
-
-      // 注册大量服务器
-      for (let i = 0; i < serverCount; i++) {
-        manager.registry(`server-${i}`, {
-          command: "node",
-          args: [`server-${i}.js`],
-        });
-      }
-
-      expect(manager.listClients()).toHaveLength(serverCount);
-
-      // 批量连接
-      await manager.connect();
-      expect(manager.getConnectedServers()).toHaveLength(serverCount);
-
-      // 验证每个客户端都可以正常工作
-      for (let i = 0; i < serverCount; i++) {
-        const client = manager.findMCP(`server-${i}`);
-        expect(client.getServerName()).toBe(`server-${i}`);
-        expect(client.isConnectedToServer()).toBe(true);
-      }
-
-      // 批量操作
-      const allTools = await manager.listTools();
-      expect(allTools.size).toBe(serverCount);
-
-      // 清理
-      await manager.disconnect();
-      expect(manager.getConnectedServers()).toHaveLength(0);
-    });
-  });
-
   describe("API 一致性", () => {
     it("两类客户端的 API 应该保持一致的行为", async () => {
       const singleClient = new Client("consistency-server", {

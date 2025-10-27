@@ -1,4 +1,4 @@
-import { BestMCP, Param, Tool } from "@bestmcp/core";
+import { BestMCP, Param, Tool } from "bestmcp";
 import { z } from "zod";
 
 class CalculatorService {
