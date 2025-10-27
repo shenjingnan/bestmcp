@@ -9,37 +9,24 @@ async function main() {
   const client = new BestMCPClient();
 
   // 注册 stdio-mcp 服务器（使用现有的 calculator-mcp 示例）
-  const stdioMcpPath = resolve(__dirname, "../../stdio-mcp/dist/index.js");
+  const stdioMcpPath = resolve(__dirname, "../../../stdio-mcp/dist/index.js");
 
   client.registry("stdio-mcp", {
     command: "node",
     args: [stdioMcpPath],
   });
 
-  try {
-    // 连接到所有已注册的服务器
-    await client.connect();
+  // 连接到所有已注册的服务器
+  await client.connect();
 
-    // 获取工具列表
-    const toolsMap = await client.listTools();
+  // 获取工具列表
+  const tools = await client.findMCP("stdio-mcp").listTools();
 
-    console.log(JSON.stringify(toolsMap, null, 2));
-  } catch (error) {
-    console.error("❌ 客户端运行失败:", error);
-    process.exit(1);
-  } finally {
-    client.disconnect();
-  }
+  console.log(JSON.stringify(tools, null, 2));
+
+  // 断开连接
+  client.disconnect();
 }
-
-// 处理程序退出
-process.on("SIGINT", () => {
-  process.exit(0);
-});
-
-process.on("SIGTERM", () => {
-  process.exit(0);
-});
 
 // 运行主程序
 main().catch((error) => {

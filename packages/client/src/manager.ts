@@ -60,13 +60,6 @@ export class BestMCPClient {
   }
 
   /**
-   * 获取已注册的客户端列表
-   */
-  listClients(): string[] {
-    return Array.from(this.clients.keys());
-  }
-
-  /**
    * 获取工具列表
    */
   async listTools(serverName?: string): Promise<Map<string, ToolDefinition[]>> {
