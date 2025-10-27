@@ -1,14 +1,14 @@
 {
-  "name": "@bestmcp/core",
-  "version": "0.0.2",
-  "description": "BestMCP 核心库",
+  "name": "@bestmcp/client",
+  "version": "0.0.1",
+  "description": "BestMCP 客户端库",
   "main": "dist/index.js",
-  "module": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     }
   },
@@ -20,25 +20,25 @@
     "build:js": "tsup",
     "build:dts": "tsc --emitDeclarationOnly",
     "dev": "tsup --watch",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "mcp",
     "modelcontextprotocol",
-    "typescript"
+    "typescript",
+    "client"
   ],
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.18.2",
-    "reflect-metadata": "^0.2.2"
-  },
-  "peerDependencies": {
-    "zod": "^3.25.0"
+    "@modelcontextprotocol/sdk": "^1.18.2"
   },
   "devDependencies": {
     "tsup": "^8.5.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^1.6.1"
   },
   "publishConfig": {
     "access": "public"

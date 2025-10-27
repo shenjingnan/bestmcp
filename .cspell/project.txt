@@ -4,3 +4,4 @@ jndi
 modelcontextprotocol
 shenjingnan
 Streamable
+unregistry

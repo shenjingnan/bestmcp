@@ -25,8 +25,11 @@
     "verbatimModuleSyntax": true,
     "paths": {
       "@server/*": ["packages/server/src/*"],
-      "@bestmcp/core": ["packages/server/src"],
-      "@bestmcp/core/*": ["packages/server/src/*"],
+      "@client/*": ["packages/client/src/*"],
+      "@bestmcp/server": ["packages/server/src"],
+      "@bestmcp/server/*": ["packages/server/src/*"],
+      "@bestmcp/client": ["packages/client/src"],
+      "@bestmcp/client/*": ["packages/client/src/*"],
       "bestmcp": ["src"],
       "bestmcp/*": ["src/*"]
     }

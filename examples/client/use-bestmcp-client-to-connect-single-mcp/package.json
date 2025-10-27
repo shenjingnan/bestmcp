@@ -1,8 +1,8 @@
 {
-  "name": "calculator-mcp",
+  "name": "client-demo",
   "version": "1.0.0",
-  "description": "Calculator MCP",
-  "main": "index.js",
+  "description": "BestMCP 客户端使用示例",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -10,12 +10,14 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "calculator-mcp"
+    "client-demo",
+    "bestmcp",
+    "example"
   ],
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@bestmcp/core": "workspace:*",
+    "@bestmcp/client": "workspace:*",
     "zod": "^3.25.0"
   },
   "packageManager": "pnpm@10.13.1"

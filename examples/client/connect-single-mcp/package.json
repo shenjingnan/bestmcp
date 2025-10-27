@@ -1,8 +1,8 @@
 {
-  "name": "calculator-mcp",
+  "name": "connect-single-mcp-example",
   "version": "1.0.0",
-  "description": "Calculator MCP",
-  "main": "index.js",
+  "description": "连接单个 MCP 服务器示例",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -10,13 +10,15 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "calculator-mcp"
+    "mcp",
+    "bestmcp",
+    "example"
   ],
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@bestmcp/core": "workspace:*",
-    "zod": "^3.25.0"
+    "@bestmcp/client": "workspace:*",
+    "cross-spawn": "^7.0.6"
   },
   "packageManager": "pnpm@10.13.1"
 }
