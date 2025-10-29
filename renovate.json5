@@ -1,41 +1,64 @@
 {
-  $schema: "https://docs.renovatebot.com/renovate-schema.json",
-  extends: ["config:recommended"],
-  labels: ["dependencies"],
-  assignees: ["shenjingnan"],
-  timezone: "Asia/Shanghai",
-  schedule: ["before 9am every weekday"],
-  rangeStrategy: "bump",
-  minimumConfidence: "high",
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+  ],
+  labels: [
+    'dependencies',
+  ],
+  assignees: [
+    'shenjingnan',
+  ],
+  timezone: 'Asia/Shanghai',
+  schedule: [
+    'before 9am every weekday',
+  ],
+  rangeStrategy: 'bump',
+  minimumConfidence: 'high',
   lockFileMaintenance: {
     enabled: true,
-    schedule: ["before 9am every weekday"],
+    schedule: [
+      'before 9am every weekday',
+    ],
   },
   packageRules: [
     {
-      matchUpdateTypes: ["patch", "minor"],
+      matchUpdateTypes: [
+        'patch',
+        'minor',
+      ],
       automerge: true,
-      automergeType: "pr",
-      minimumConfidence: "high",
+      automergeType: 'pr',
+      minimumConfidence: 'high',
     },
     {
-      matchUpdateTypes: ["major"],
+      matchUpdateTypes: [
+        'major',
+      ],
       dependencyDashboardApproval: true,
-      minimumConfidence: "high",
+      minimumConfidence: 'high',
     },
     {
-      matchManagers: ["npm"],
-      matchPackagePatterns: ["^@types/"],
+      matchManagers: [
+        'npm',
+      ],
       automerge: true,
-      automergeType: "pr",
-      minimumConfidence: "high",
+      automergeType: 'pr',
+      minimumConfidence: 'high',
+      matchPackageNames: [
+        '/^@types//',
+      ],
     },
     {
-      matchDepTypes: ["devDependencies"],
-      matchUpdateTypes: ["major"],
+      matchDepTypes: [
+        'devDependencies',
+      ],
+      matchUpdateTypes: [
+        'major',
+      ],
       dependencyDashboardApproval: false,
       automerge: false,
-      minimumConfidence: "high",
+      minimumConfidence: 'high',
     },
   ],
 }
