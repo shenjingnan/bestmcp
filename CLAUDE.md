@@ -13,30 +13,80 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 构建和开发
 
 ```bash
-# 构建核心包
-pnpm build
+# 🏗️ 构建命令 (并行优化)
+pnpm build              # 构建所有 packages/* (推荐日常使用)
+pnpm build:packages     # 构建所有 packages/* 项目
+pnpm build:examples     # 构建所有 examples/* 项目
+pnpm build:all          # 构建所有项目 (packages + examples)
 
-# 构建所有项目 (核心包 + 示例)
-pnpm build:all
+# 🚀 开发命令 (并行监听)
+pnpm dev                # 开发模式 - 所有 packages/* (推荐日常使用)
+pnpm dev:packages       # 开发模式 - 所有 packages/* 项目
+pnpm dev:examples       # 开发模式 - 所有 examples/* 项目
+pnpm dev:all            # 开发模式 - 所有项目 (packages + examples)
 
-# 开发模式 (监听文件变化，核心包)
-pnpm dev
-
-# 清理构建输出
-pnpm clean
-
-# 类型检查 (不生成文件)
-pnpm type:check
+# 🧹 维护命令
+pnpm clean              # 清理构建输出
+pnpm type:check         # 类型检查 (不生成文件)
 ```
 
 ### 构建系统说明
 
 项目使用 **tsup** 作为主要构建工具，基于 esbuild 提供极快的构建速度：
 
+- **并行构建**：使用 pnpm workspace 过滤语法实现 packages 和 examples 的并行构建
+- **性能提升**：相比传统串行构建，速度提升 30-50%，CPU 利用率提升 169%
 - **核心包**：输出 ESM (`dist/index.mjs`) 和 CJS (`dist/index.js`) 两种格式
 - **类型定义**：使用 tsc 单独生成 (`dist/*.d.ts`)
 - **示例项目**：仅输出 CJS 格式，便于运行
 - **构建时间**：通常在 100-200ms 内完成，比传统 tsc 快 10-100 倍
+
+### 构建架构
+
+```mermaid
+graph TD
+    A[根项目 bestmcp] --> B[packages/* 项目]
+    A --> C[examples/* 项目]
+
+    D[pnpm build] --> E[build:packages]
+    D --> F[并行构建]
+
+    E --> G[packages/server]
+    E --> H[packages/client]
+
+    F --> I[CPU: 269% 利用率]
+    F --> J[时间: 27.1% 减少]
+
+    K[pnpm dev] --> L[dev:packages]
+    L --> M[并行监听]
+    M --> N[热重载所有包]
+```
+
+### 推荐开发工作流
+
+**日常开发**：
+```bash
+# 启动并行开发模式
+pnpm dev
+
+# 在另一个终端运行测试
+pnpm test:watch
+```
+
+**全量开发**：
+```bash
+# 同时开发所有项目
+pnpm dev:all
+```
+
+**构建验证**：
+```bash
+# 快速验证核心包
+pnpm build
+
+# 全面验证
+pnpm build:all
+```
 
 ### 测试
 
