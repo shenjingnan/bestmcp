@@ -42,7 +42,8 @@
     "dev:packages": "pnpm -r --filter './packages/**' dev",
     "dev:examples": "pnpm -r --filter './examples/**' dev",
     "dev:all": "pnpm dev:packages & pnpm dev:examples",
-    "clean": "rm -rf dist && pnpm -C packages/server clean",
+    "dev:docs": "cd docs && pnpm run dev",
+    "clean": "pnpm -r --filter './packages/**' clean",
     "type:check": "tsc --noEmit",
     "test": "vitest run",
     "test:silent": "vitest run --silent",
@@ -51,7 +52,6 @@
     "spell:check": "cspell \"**/*.{ts,js,json,md,yaml}\"",
     "check": "biome check .",
     "check:fix": "biome check --write --unsafe .",
-    "docs:dev": "cd docs && pnpm run dev",
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm type:check && pnpm check:fix"
   },
   "dependencies": {
