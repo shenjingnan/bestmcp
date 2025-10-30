@@ -15,9 +15,10 @@
     "releaseNotes": "npx conventional-changelog-cli -p conventionalcommits"
   },
   "npm": {
-    "publish": false,
+    "publish": true,
     "publishArgs": ["--access", "public"],
-    "skipChecks": true
+    "skipChecks": true,
+    "force": true
   },
   "plugins": {
     "@release-it-plugins/workspaces": {
@@ -36,7 +37,7 @@
   },
   "hooks": {
     "before:init": ["pnpm audit --audit-level moderate", "pnpm test", "pnpm type:check", "pnpm check:fix"],
-    "before:release": ["pnpm clean", "pnpm build:packages"],
+    "before:release": ["npm install -g npm@latest", "pnpm clean", "pnpm build:packages"],
     "after:bump": ["pnpm build:packages"],
     "after:release": ["echo \"🎉 版本 v${version} 发布完成！\""]
   }
