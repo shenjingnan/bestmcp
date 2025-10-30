@@ -15,10 +15,9 @@
     "releaseNotes": "npx conventional-changelog-cli -p conventionalcommits"
   },
   "npm": {
-    "publish": false,
+    "publish": true,
     "publishArgs": ["--access", "public"],
-    "skipChecks": true,
-    "force": true
+    "skipChecks": true
   },
   "plugins": {
     "@release-it-plugins/workspaces": {
