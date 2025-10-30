@@ -17,7 +17,8 @@
   "npm": {
     "publish": true,
     "publishArgs": ["--access", "public"],
-    "skipChecks": true
+    "skipChecks": true,
+    "force": true
   },
   "plugins": {
     "@release-it-plugins/workspaces": {
