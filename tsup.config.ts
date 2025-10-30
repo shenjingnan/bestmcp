@@ -6,14 +6,14 @@ export default defineConfig({
   },
   format: ["cjs", "esm"],
   dts: false,
-  clean: true,
+  clean: false,
   sourcemap: true,
-  external: ["@modelcontextprotocol/sdk", "reflect-metadata", "zod"],
+  external: ["@modelcontextprotocol/sdk", "reflect-metadata", "zod", "@bestmcp/core", "@bestmcp/client"],
   treeshake: true,
-  minify: true,
+  minify: false,
   target: "node18",
   outDir: "dist",
-  splitting: true,
+  splitting: false,
   swc: {
     minify: false,
     jsc: {

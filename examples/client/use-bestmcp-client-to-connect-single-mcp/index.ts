@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BestMCPClient } from "@bestmcp/client";
+import { BestMCPClient } from "bestmcp";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
@@ -9,7 +9,7 @@ async function main() {
   const client = new BestMCPClient();
 
   // 注册 stdio-mcp 服务器（使用现有的 calculator-mcp 示例）
-  const stdioMcpPath = resolve(__dirname, "../../../stdio-mcp/dist/index.js");
+  const stdioMcpPath = resolve(__dirname, "../../../server/stdio-mcp/dist/index.js");
 
   client.registry("stdio-mcp", {
     command: "node",

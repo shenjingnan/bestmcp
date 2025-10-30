@@ -1,11 +1,11 @@
 import { resolve } from "node:path";
-import { Client } from "@bestmcp/client";
+import { Client } from "bestmcp";
 
 async function main() {
   // 创建客户端实例
   const client = new Client("stdio-mcp", {
     command: "node",
-    args: [resolve(__dirname, "../../../stdio-mcp/dist/index.js")],
+    args: [resolve(__dirname, "../../../server/stdio-mcp/dist/index.js")],
   });
 
   // 连接MCP服务器

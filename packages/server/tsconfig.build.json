@@ -1,12 +1,15 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
-    "outDir": "dist",
-    "verbatimModuleSyntax": true
+    "skipLibCheck": true,
+    "paths": {
+      "@server/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "packages", "examples", "**/*.test.ts", "**/*.spec.ts"]
+  "exclude": ["node_modules", "dist", "tests"]
 }
