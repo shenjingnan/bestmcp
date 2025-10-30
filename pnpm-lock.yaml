@@ -122,9 +122,9 @@ importers:
 
   examples/stdio-mcp:
     dependencies:
-      '@bestmcp/core':
+      bestmcp:
         specifier: workspace:*
-        version: link:../../packages/server
+        version: link:../..
       zod:
         specifier: ^3.25.0
         version: 3.25.76

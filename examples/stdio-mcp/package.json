@@ -15,7 +15,7 @@
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@bestmcp/core": "workspace:*",
+    "bestmcp": "workspace:*",
     "zod": "^3.25.0"
   },
   "packageManager": "pnpm@10.13.1"
