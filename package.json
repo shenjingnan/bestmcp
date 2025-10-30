@@ -51,14 +51,15 @@
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm type:check && pnpm check:fix"
   },
   "dependencies": {
-    "@bestmcp/core": "workspace:*",
     "@bestmcp/client": "workspace:*",
+    "@bestmcp/server": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.18.2",
     "reflect-metadata": "^0.2.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
+    "@release-it-plugins/workspaces": "^5.0.3",
     "@release-it/conventional-changelog": "^10.0.1",
     "@types/node": "^22.0.2",
     "@vitest/coverage-v8": "^1.6.1",

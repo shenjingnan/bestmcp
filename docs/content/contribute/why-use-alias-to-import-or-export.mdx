@@ -35,7 +35,7 @@ import { TransportManager } from "@server/transport-manager";
 别名让导入路径更加语义化，能够清楚地表明模块的来源和用途：
 
 - `@server/*` - 来源于核心库的模块
-- `@bestmcp/core` - 核心库的主入口
+- `@bestmcp/server` - 核心库的主入口
 - `bestmcp` - 根级别包的公共 API
 
 ### 3. **避免相对路径混乱**
@@ -76,11 +76,11 @@ import { ToolNotFoundError } from "@server/errors";
 import type { ToolMetadata } from "@server/types";
 ```
 
-### `@bestmcp/core`
+### `@bestmcp/server`
 
 **映射关系：**
 ```json
-"@bestmcp/core": ["packages/server/src"]
+"@bestmcp/server": ["packages/server/src"]
 ```
 
 **用途：** 核心库的主入口点，用于从外部导入核心库
@@ -88,8 +88,8 @@ import type { ToolMetadata } from "@server/types";
 **使用场景：**
 ```ts
 // 从根级别或示例项目中导入核心库
-import * as BestMCP from "@bestmcp/core";
-import { BestMCP as BestMCPClass } from "@bestmcp/core";
+import * as BestMCP from "@bestmcp/server";
+import { BestMCP as BestMCPClass } from "@bestmcp/server";
 ```
 
 ### `bestmcp`
@@ -117,8 +117,8 @@ import { BestMCP, Tool, Param } from "bestmcp";
     "baseUrl": ".",
     "paths": {
       "@server/*": ["packages/server/src/*"],
-      "@bestmcp/core": ["packages/server/src"],
-      "@bestmcp/core/*": ["packages/server/src/*"],
+      "@bestmcp/server": ["packages/server/src"],
+      "@bestmcp/server/*": ["packages/server/src/*"],
       "bestmcp": ["src"],
       "bestmcp/*": ["src/*"]
     }
@@ -133,14 +133,14 @@ export default defineConfig({
   test: {
     alias: {
       "@server": path.resolve(__dirname, "packages/server/src"),
-      "@bestmcp/core": path.resolve(__dirname, "packages/server/src"),
+      "@bestmcp/server": path.resolve(__dirname, "packages/server/src"),
       bestmcp: path.resolve(__dirname, "src"),
     },
   },
   resolve: {
     alias: {
       "@server": path.resolve(__dirname, "packages/server/src"),
-      "@bestmcp/core": path.resolve(__dirname, "packages/server/src"),
+      "@bestmcp/server": path.resolve(__dirname, "packages/server/src"),
       bestmcp: path.resolve(__dirname, "src"),
     },
   },
