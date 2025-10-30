@@ -8,13 +8,7 @@ export default defineConfig({
   dts: false,
   clean: false,
   sourcemap: true,
-  external: [
-    "@modelcontextprotocol/sdk",
-    "reflect-metadata",
-    "zod",
-    "@bestmcp/core",
-    "@bestmcp/client"
-  ],
+  external: ["@modelcontextprotocol/sdk", "reflect-metadata", "zod", "@bestmcp/core", "@bestmcp/client"],
   treeshake: true,
   minify: false,
   target: "node18",
