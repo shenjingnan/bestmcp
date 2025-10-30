@@ -5,15 +5,15 @@ export default defineConfig({
     index: "src/index.ts",
   },
   format: ["cjs", "esm"],
-  dts: false,
+  dts: true,
   clean: true,
   sourcemap: true,
   external: ["@modelcontextprotocol/sdk", "reflect-metadata", "zod"],
   treeshake: true,
-  minify: true,
+  minify: false,
   target: "node18",
   outDir: "dist",
-  splitting: true,
+  splitting: false,
   swc: {
     minify: false,
     jsc: {

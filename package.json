@@ -1,6 +1,6 @@
 {
   "name": "bestmcp",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架",
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
@@ -14,6 +14,7 @@
     "typescript"
   ],
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
@@ -23,27 +24,24 @@
     }
   },
   "files": [
-    "dist/index.js",
-    "dist/index.mjs",
-    "dist/index.d.ts",
-    "dist/index.js.map",
-    "dist/index.mjs.map",
-    "dist/packages/server/src/**/*.d.ts",
-    "dist/packages/server/src/**/*.d.ts.map",
+    "dist/**/*",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "pnpm build:packages",
+    "build": "pnpm build:js && pnpm build:dts",
+    "build:js": "tsup",
+    "build:dts": "tsc --emitDeclarationOnly",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
     "build:packages": "pnpm -r --filter './packages/**' build",
     "build:examples": "pnpm -r --filter './examples/**' build",
-    "build:all": "pnpm build:packages && pnpm build:examples",
-    "dev": "pnpm dev:packages",
+    "build:all": "pnpm build && pnpm build:packages && pnpm build:examples",
     "dev:packages": "pnpm -r --filter './packages/**' dev",
     "dev:examples": "pnpm -r --filter './examples/**' dev",
-    "dev:all": "pnpm dev:packages & pnpm dev:examples",
+    "dev:all": "pnpm dev & pnpm dev:packages & pnpm dev:examples",
     "dev:docs": "cd docs && pnpm run dev",
-    "clean": "pnpm -r --filter './packages/**' clean",
+    "clean:packages": "pnpm -r --filter './packages/**' clean",
     "test": "vitest run",
     "test:silent": "vitest run --silent",
     "test:coverage": "vitest run --coverage",
@@ -55,22 +53,22 @@
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm type:check && pnpm check:fix"
   },
   "dependencies": {
+    "@bestmcp/core": "workspace:*",
+    "@bestmcp/client": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.18.2",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
     "@release-it/conventional-changelog": "^10.0.1",
-    "@swc/core": "^1.13.5",
-    "@swc/helpers": "^0.5.17",
     "@types/node": "^22.0.2",
     "@vitest/coverage-v8": "^1.6.1",
     "cspell": "^9.2.1",
     "release-it": "^19.0.5",
     "tsup": "^8.5.0",
     "typescript": "^5.5.4",
-    "vitest": "^1.6.1",
-    "zod": "^3.25.76"
+    "vitest": "^1.6.1"
   },
   "packageManager": "pnpm@10.13.1"
 }

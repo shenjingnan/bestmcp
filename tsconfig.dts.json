@@ -7,14 +7,6 @@
     "outDir": "dist",
     "verbatimModuleSyntax": true
   },
-  "include": ["packages/server/src/**/*.ts"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "packages/server/tests/**/*",
-    "examples/**/*",
-    "src/**/*",
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "packages", "examples", "**/*.test.ts", "**/*.spec.ts"]
 }
