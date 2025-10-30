@@ -24,6 +24,12 @@ vite.config.ts.timestamp-*
 dist
 *.tsbuildinfo
 
-# TypeScript declaration files (all auto-generated)
-*.d.ts
-*.d.ts.map
+# TypeScript declaration files (exclude unwanted auto-generated ones)
+tsup.config.d.ts
+tsup.config.d.ts.map
+**/tests/**/*.d.ts
+**/tests/**/*.d.ts.map
+**/*.config.d.ts
+**/*.config.d.ts.map
+src/**/*.d.ts
+src/**/*.d.ts.map

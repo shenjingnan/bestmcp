@@ -16,9 +16,7 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build": "pnpm build:js && pnpm build:dts",
-    "build:js": "tsup",
-    "build:dts": "tsc --emitDeclarationOnly",
+    "build": "tsc --project tsconfig.build.json && tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist"
   },
