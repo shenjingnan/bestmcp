@@ -67,3 +67,25 @@ export interface BestMCPConfig {
   capabilities?: ServerCapabilities;
   instructions?: string;
 }
+
+// 验证结果接口
+export interface ValidationResult {
+  isValid: boolean;
+  errors?: Array<{
+    path: string;
+    message: string;
+    code?: string;
+  }>;
+  data?: unknown;
+}
+
+// 服务器信息接口
+export interface ServerInfo {
+  name: string;
+  version?: string;
+  host?: string;
+  port?: number;
+  protocol: "stdio" | "http";
+  status: "running" | "stopped" | "error";
+  capabilities?: ServerCapabilities;
+}
