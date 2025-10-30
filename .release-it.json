@@ -21,10 +21,7 @@
   },
   "plugins": {
     "@release-it-plugins/workspaces": {
-      "workspaces": [
-        "packages/server",
-        "packages/client"
-      ],
+      "workspaces": ["packages/server", "packages/client"],
       "rootWorkspace": true,
       "updateRootVersion": true,
       "includeWorkspaceRoot": true
