@@ -13,7 +13,9 @@
     "**/dist/**",
     "**/node_modules/**",
     "**/coverage/**",
-    "**/coverage.lcov/**"
+    "**/coverage.lcov/**",
+    "docs/node_modules/**",
+    "examples/*/node_modules/**"
   ],
   "dictionaryDefinitions": [
     {
