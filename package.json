@@ -15,10 +15,10 @@
   ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/src/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     }
@@ -29,9 +29,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "pnpm build:js && pnpm build:dts",
-    "build:js": "tsup",
-    "build:dts": "tsc --emitDeclarationOnly",
+    "build": "tsup && pnpm exec tsc --declaration --emitDeclarationOnly --declarationMap",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "build:packages": "pnpm -r --filter './packages/**' build",

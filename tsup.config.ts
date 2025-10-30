@@ -5,10 +5,16 @@ export default defineConfig({
     index: "src/index.ts",
   },
   format: ["cjs", "esm"],
-  dts: true,
+  dts: false,
   clean: true,
   sourcemap: true,
-  external: ["@modelcontextprotocol/sdk", "reflect-metadata", "zod"],
+  external: [
+    "@modelcontextprotocol/sdk",
+    "reflect-metadata",
+    "zod",
+    "@bestmcp/core",
+    "@bestmcp/client"
+  ],
   treeshake: true,
   minify: false,
   target: "node18",
