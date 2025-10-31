@@ -225,12 +225,7 @@ jobs:
 
           # 如果没有 changelog，使用默认内容
           if [ -z "$CHANGELOG_CONTENT" ]; then
-            CHANGELOG_CONTENT="## 更新内容
-
-版本 $TARGET_VERSION 发布完成。
-
-### 主要改动
-- 详细变更请查看 git commit 历史"
+            CHANGELOG_CONTENT=$(printf "## 更新内容\n\n版本 %s 发布完成。\n\n### 主要改动\n- 详细变更请查看 git commit 历史" "$TARGET_VERSION")
           fi
 
           # 创建 GitHub Release
