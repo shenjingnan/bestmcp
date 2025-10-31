@@ -111,54 +111,156 @@ jobs:
           echo "target_version=$TARGET_VERSION" >> $GITHUB_OUTPUT
           echo "prerelease_id=$PRERELEASE_ID" >> $GITHUB_OUTPUT
 
-      - name: 发布
+      - name: 准备 Changesets
+        run: |
+          TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
+          VERSION_TYPE="${{ steps.parse-version.outputs.version_type }}"
+
+          echo "📋 准备 Changesets 发布："
+          echo "   - 目标版本: $TARGET_VERSION"
+          echo "   - 版本类型: $VERSION_TYPE"
+          echo "   - 当前分支: ${{ github.ref_name }}"
+          echo "   - 预演模式: ${{ github.event.inputs.dry_run }}"
+          echo ""
+
+          # 清理可能存在的旧版本信息
+          rm -f .changeset/pre.json
+
+          # 创建临时的 changeset 文件来指定版本号
+          mkdir -p .changeset
+          cat > .changeset/temp-release-$(date +%s).md << EOF
+---
+"bestmcp": $VERSION_TYPE
+"@bestmcp/server": $VERSION_TYPE
+"@bestmcp/client": $VERSION_TYPE
+---
+
+发布指定版本 $TARGET_VERSION
+EOF
+
+          echo "✅ Changeset 文件已创建"
+
+      - name: 应用版本更新
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
+          VERSION_TYPE="${{ steps.parse-version.outputs.version_type }}"
+
+          echo "🚀 应用版本更新到 $TARGET_VERSION..."
+
+          # 应用 changesets 版本更新
+          pnpm changeset version
+
+          # 手动设置版本号到指定值
+          if [ "${{ steps.parse-version.outputs.version_type }}" = "release" ]; then
+            # 正式版
+            pnpm -r --filter "./packages/**" exec npm version $TARGET_VERSION --no-git-tag-version
+            npm version $TARGET_VERSION --no-git-tag-version
+          else
+            # 预发布版
+            PRERELEASE_VERSION="${TARGET_VERSION}-${{ steps.parse-version.outputs.prerelease_id }}"
+            pnpm -r --filter "./packages/**" exec npm version $PRERELEASE_VERSION --no-git-tag-version
+            npm version $PRERELEASE_VERSION --no-git-tag-version
+          fi
+
+          echo "✅ 版本号已更新"
+
+      - name: 构建项目
+        run: |
+          echo "🏗️ 构建项目..."
+          pnpm clean
+          pnpm build:packages
+          echo "✅ 项目构建完成"
+
+      - name: 生成 CHANGELOG
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "📝 生成 CHANGELOG..."
+          pnpm changeset generate
+          echo "✅ CHANGELOG 已生成"
+
+      - name: 发布到 NPM
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          echo "📦 发布到 NPM..."
+          pnpm changeset publish
+          echo "✅ NPM 发布完成"
+
+      - name: 提交版本更新
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
+
+          echo "📝 提交版本更新..."
+          git add .
+          git commit -m "chore: release v$TARGET_VERSION"
+          echo "✅ 版本更新已提交"
+
+      - name: 创建 Git Tag 和 GitHub Release
+        if: github.event.inputs.dry_run != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
-          RELEASE_CMD="npx release-it --ci"
 
-          if [ "${{ steps.parse-version.outputs.version_type }}" = "release" ]; then
-            # 正式版发布
-            RELEASE_CMD="$RELEASE_CMD -i $TARGET_VERSION"
-          else
-            # 预发布版发布
-            RELEASE_CMD="$RELEASE_CMD $TARGET_VERSION --preRelease=${{ steps.parse-version.outputs.prerelease_id }}"
+          echo "🏷️ 创建 Git Tag 和 GitHub Release..."
+
+          # 创建并推送 tag
+          git tag v$TARGET_VERSION
+          git push --follow-tags
+
+          # 创建 GitHub Release
+          RELEASE_TITLE="🚀 v$TARGET_VERSION"
+
+          # 读取 CHANGELOG 内容
+          CHANGELOG_CONTENT=""
+          if [ -f "docs/content/CHANGELOG.md" ]; then
+            # 提取最新版本的 changelog
+            awk "/^## \\[$TARGET_VERSION\\]/{flag=1; next} /^## \\[/{flag=0} flag" docs/content/CHANGELOG.md > /tmp/changelog.md
+            CHANGELOG_CONTENT=$(cat /tmp/changelog.md)
           fi
 
+          # 如果没有 changelog，使用默认内容
+          if [ -z "$CHANGELOG_CONTENT" ]; then
+            CHANGELOG_CONTENT="## 更新内容
+
+版本 $TARGET_VERSION 发布完成。
+
+### 主要改动
+- 详细变更请查看 git commit 历史"
+          fi
+
+          # 创建 GitHub Release
+          gh release create v$TARGET_VERSION \
+            --title "$RELEASE_TITLE" \
+            --notes "$CHANGELOG_CONTENT" \
+            --latest
+
+          echo "✅ Git Tag 和 GitHub Release 创建完成"
+
+      - name: 清理临时文件
+        if: always()
+        run: |
+          echo "🧹 清理临时文件..."
+          rm -f .changeset/temp-release-*.md
+          echo "✅ 清理完成"
+
+      - name: 完成发布
+        run: |
+          TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
+          echo ""
+          echo "🎉 发布流程完成！"
+          echo "📋 发布信息："
+          echo "   - 版本: $TARGET_VERSION"
+          echo "   - 类型: ${{ steps.parse-version.outputs.version_type }}"
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            RELEASE_CMD="$RELEASE_CMD --dry-run"
+            echo "   - 模式: 预演模式（实际上未发布）"
+          else
+            echo "   - 模式: 正式发布"
+            echo "   - NPM: ✅ 已发布"
+            echo "   - GitHub Release: ✅ 已创建"
+            echo "   - Git Tag: ✅ 已创建"
           fi
-
-          echo "📦 开始发布流程..."
-          echo "📋 版本信息："
-          echo "   - 目标版本: $TARGET_VERSION"
-          echo "   - 版本类型: ${{ steps.parse-version.outputs.version_type }}"
-          echo "   - 预发布ID: ${{ steps.parse-version.outputs.prerelease_id }}"
-          echo "   - 当前分支: ${{ github.ref_name }}"
-          echo "   - 预演模式: ${{ github.event.inputs.dry_run }}"
-          echo "   - 执行命令: $RELEASE_CMD"
-          echo ""
-
-          # 检查环境
-          echo "🔍 环境检查："
-          echo "   - Node版本: $(node --version)"
-          echo "   - pnpm版本: $(pnpm --version)"
-          echo "   - 当前分支: $(git branch --show-current)"
-          echo "   - Git状态: $(git status --porcelain | wc -l) 个文件有修改"
-          echo ""
-
-          # 执行发布命令
-          echo "🚀 执行发布命令..."
-
-          # 执行发布并捕获错误
-          if ! eval "$RELEASE_CMD"; then
-            echo "❌ 发布失败！"
-            echo "📋 错误信息："
-            echo "   - 可能原因：版本号冲突、构建失败、网络问题或权限问题"
-            echo "   - 检查日志中的详细错误信息"
-            echo "   - 尝试在本地执行相同命令进行调试"
-            exit 1
-          fi
-
-          echo "✅ 发布命令执行完成！"
