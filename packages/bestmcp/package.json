@@ -1,0 +1,56 @@
+{
+  "name": "bestmcp",
+  "version": "0.0.7",
+  "description": "BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架",
+  "author": "shenjingnan <sjn.code@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shenjingnan/bestmcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "typescript"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@bestmcp/client": "workspace:*",
+    "@bestmcp/server": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.18.2",
+    "reflect-metadata": "^0.2.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.6",
+    "@types/node": "^22.0.2",
+    "@vitest/coverage-v8": "^1.6.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.5.4",
+    "vitest": "^1.6.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -11,22 +11,6 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      '@bestmcp/client':
-        specifier: workspace:*
-        version: link:packages/client
-      '@bestmcp/server':
-        specifier: workspace:*
-        version: link:packages/server
-      '@modelcontextprotocol/sdk':
-        specifier: ^1.18.2
-        version: 1.20.2
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: 0.2.2
-      zod:
-        specifier: ^3.25.76
-        version: 3.25.76
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.2.6
@@ -118,7 +102,7 @@ importers:
     dependencies:
       bestmcp:
         specifier: workspace:*
-        version: link:../../..
+        version: link:../../../packages/bestmcp
       zod:
         specifier: ^3.25.0
         version: 3.25.76
@@ -127,10 +111,47 @@ importers:
     dependencies:
       bestmcp:
         specifier: workspace:*
-        version: link:../../..
+        version: link:../../../packages/bestmcp
       zod:
         specifier: ^3.25.0
         version: 3.25.76
+
+  packages/bestmcp:
+    dependencies:
+      '@bestmcp/client':
+        specifier: workspace:*
+        version: link:../client
+      '@bestmcp/server':
+        specifier: workspace:*
+        version: link:../server
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.18.2
+        version: 1.20.2
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.2.6
+        version: 2.3.1
+      '@types/node':
+        specifier: ^22.0.2
+        version: 22.18.12
+      '@vitest/coverage-v8':
+        specifier: ^1.6.1
+        version: 1.6.1(vitest@1.6.1(@types/node@22.18.12)(lightningcss@1.30.2)(sass@1.93.2))
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(@swc/core@1.13.5(@swc/helpers@0.5.17))(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.1)
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.1
+        version: 1.6.1(@types/node@22.18.12)(lightningcss@1.30.2)(sass@1.93.2)
 
   packages/client:
     dependencies:

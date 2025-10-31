@@ -27,7 +27,7 @@ export default defineConfig({
         legacyDecorator: true,
       },
       loose: false,
-      externalHelpers: true,
+      externalHelpers: false,
     },
     logger: {
       setName: () => {},
@@ -38,5 +38,5 @@ export default defineConfig({
       log: () => {},
     },
   },
-  onSuccess: 'echo "✅ bestmcp 根包构建完成"',
+  onSuccess: 'echo "✅ bestmcp 包构建完成"',
 });
