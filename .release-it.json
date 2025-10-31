@@ -36,14 +36,16 @@
       "devDependencies": false,
       "publish": {
         "packages": ["packages/server", "packages/client"],
-        "root": true
+        "root": true,
+        "timeout": 300000,
+        "retry": 2
       }
     },
     "@release-it/conventional-changelog": {
       "preset": "conventionalcommits",
       "infile": "CHANGELOG.md",
       "releaseCommitMessageFormat": "chore: release v${version}",
-      "ignoreRecommendedBump": false,
+      "ignoreRecommendedBump": true,
       "strictSemVer": true
     }
   },

@@ -209,11 +209,11 @@ jobs:
           RELEASE_CMD="npx release-it --ci --verbose"
 
           if [ "${{ steps.parse-version.outputs.version_type }}" = "release" ]; then
-            # 正式版发布
-            RELEASE_CMD="$RELEASE_CMD -i $TARGET_VERSION"
+            # 正式版发布 - 禁用自动版本计算，强制使用指定版本
+            RELEASE_CMD="$RELEASE_CMD --no-increment -i $TARGET_VERSION"
           else
-            # 预发布版发布
-            RELEASE_CMD="$RELEASE_CMD $TARGET_VERSION --preRelease=${{ steps.parse-version.outputs.prerelease_id }}"
+            # 预发布版发布 - 禁用自动版本计算，强制使用指定版本
+            RELEASE_CMD="$RELEASE_CMD --no-increment $TARGET_VERSION --preRelease=${{ steps.parse-version.outputs.prerelease_id }}"
           fi
 
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
