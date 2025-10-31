@@ -52,7 +52,7 @@
   "hooks": {
     "before:init": [
       "pnpm audit --audit-level moderate",
-      "pnpm test",
+      "pnpm test:silent",
       "pnpm type:check",
       "pnpm check:fix",
       "echo '🔍 检查版本同步状态...' && node -e \"const root=require('./package.json').version, client=require('./packages/client/package.json').version, server=require('./packages/server/package.json').version; console.log('版本状态:', {root, client, server}); if(root!==client||root!==server) { console.error('❌ 版本不同步!'); process.exit(1); } else { console.log('✅ 版本同步正常'); }\""
