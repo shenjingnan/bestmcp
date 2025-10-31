@@ -1,0 +1,14 @@
+{
+  "mode": "exit",
+  "tag": "beta",
+  "initialVersions": {
+    "docs": "1.0.0",
+    "connect-single-mcp-example": "1.0.2",
+    "client-demo": "1.0.2",
+    "calculator-mcp": "1.0.2",
+    "bestmcp": "0.0.7",
+    "@bestmcp/client": "0.0.1",
+    "@bestmcp/server": "0.0.2"
+  },
+  "changesets": []
+}

@@ -126,14 +126,23 @@ jobs:
           # 清理可能存在的旧版本信息
           rm -f .changeset/pre.json
 
+          # 进入 pre-release 模式（如果需要）
+          if [ "$VERSION_TYPE" = "prerelease" ]; then
+            echo "🔧 进入 pre-release 模式..."
+            pnpm changeset pre enter ${{ steps.parse-version.outputs.prerelease_id }}
+          fi
+
           # 创建临时的 changeset 文件来指定版本号
           mkdir -p .changeset
           TIMESTAMP=$(date +%s)
           CHANGESET_FILE=".changeset/temp-release-$TIMESTAMP.md"
           echo "---" > $CHANGESET_FILE
-          echo "\"bestmcp\": $VERSION_TYPE" >> $CHANGESET_FILE
-          echo "\"@bestmcp/server\": $VERSION_TYPE" >> $CHANGESET_FILE
-          echo "\"@bestmcp/client\": $VERSION_TYPE" >> $CHANGESET_FILE
+
+          # 使用 patch 作为默认的版本增量（适用于大多数发布）
+          echo "\"bestmcp\": patch" >> $CHANGESET_FILE
+          echo "\"@bestmcp/server\": patch" >> $CHANGESET_FILE
+          echo "\"@bestmcp/client\": patch" >> $CHANGESET_FILE
+
           echo "---" >> $CHANGESET_FILE
           echo "" >> $CHANGESET_FILE
           echo "发布指定版本 $TARGET_VERSION" >> $CHANGESET_FILE
@@ -146,22 +155,20 @@ jobs:
           TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
           VERSION_TYPE="${{ steps.parse-version.outputs.version_type }}"
 
-          echo "🚀 应用版本更新到 $TARGET_VERSION..."
+          echo "🚀 应用版本更新..."
 
           # 应用 changesets 版本更新
           pnpm changeset version
 
-          # 手动设置版本号到指定值
-          if [ "${{ steps.parse-version.outputs.version_type }}" = "release" ]; then
-            # 正式版
-            pnpm -r --filter "./packages/**" exec npm version $TARGET_VERSION --no-git-tag-version
-            npm version $TARGET_VERSION --no-git-tag-version
-          else
-            # 预发布版
-            PRERELEASE_VERSION="${TARGET_VERSION}-${{ steps.parse-version.outputs.prerelease_id }}"
-            pnpm -r --filter "./packages/**" exec npm version $PRERELEASE_VERSION --no-git-tag-version
-            npm version $PRERELEASE_VERSION --no-git-tag-version
-          fi
+          # 检查生成的版本号
+          echo "📋 检查版本更新结果："
+          for pkg in packages/*/package.json; do
+            if [ -f "$pkg" ]; then
+              name=$(jq -r '.name' "$pkg")
+              version=$(jq -r '.version' "$pkg")
+              echo "   - $name: $version"
+            fi
+          done
 
           echo "✅ 版本号已更新"
 
@@ -178,6 +185,13 @@ jobs:
           echo "📝 生成 CHANGELOG..."
           pnpm changeset generate
           echo "✅ CHANGELOG 已生成"
+
+      - name: 退出 Pre-release 模式
+        if: github.event.inputs.dry_run != 'true' && steps.parse-version.outputs.version_type == 'prerelease'
+        run: |
+          echo "🔧 退出 pre-release 模式..."
+          pnpm changeset pre exit
+          echo "✅ 已退出 pre-release 模式"
 
       - name: 发布到 NPM
         if: github.event.inputs.dry_run != 'true'
@@ -241,6 +255,13 @@ jobs:
         run: |
           echo "🧹 清理临时文件..."
           rm -f .changeset/temp-release-*.md
+
+          # 确保退出 pre-release 模式（如果还在）
+          if [ -f ".changeset/pre.json" ]; then
+            echo "🔧 清理残留的 pre-release 配置..."
+            pnpm changeset pre exit || true
+          fi
+
           echo "✅ 清理完成"
 
       - name: 完成发布
