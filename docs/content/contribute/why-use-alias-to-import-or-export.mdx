@@ -96,7 +96,7 @@ import { BestMCP as BestMCPClass } from "@bestmcp/server";
 
 **映射关系：**
 ```json
-"bestmcp": ["src"]
+"bestmcp": ["packages/bestmcp/src"]
 ```
 
 **用途：** 根级别包的入口，主要用于示例项目和外部使用
@@ -119,8 +119,8 @@ import { BestMCP, Tool, Param } from "bestmcp";
       "@server/*": ["packages/server/src/*"],
       "@bestmcp/server": ["packages/server/src"],
       "@bestmcp/server/*": ["packages/server/src/*"],
-      "bestmcp": ["src"],
-      "bestmcp/*": ["src/*"]
+      "bestmcp": ["packages/bestmcp/src"],
+      "bestmcp/*": ["packages/bestmcp/src/*"]
     }
   }
 }
@@ -134,14 +134,14 @@ export default defineConfig({
     alias: {
       "@server": path.resolve(__dirname, "packages/server/src"),
       "@bestmcp/server": path.resolve(__dirname, "packages/server/src"),
-      bestmcp: path.resolve(__dirname, "src"),
+      bestmcp: path.resolve(__dirname, "packages/bestmcp/src"),
     },
   },
   resolve: {
     alias: {
       "@server": path.resolve(__dirname, "packages/server/src"),
       "@bestmcp/server": path.resolve(__dirname, "packages/server/src"),
-      bestmcp: path.resolve(__dirname, "src"),
+      bestmcp: path.resolve(__dirname, "packages/bestmcp/src"),
     },
   },
 });
