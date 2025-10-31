@@ -129,12 +129,73 @@ jobs:
           echo "target_version=$TARGET_VERSION" >> $GITHUB_OUTPUT
           echo "prerelease_id=$PRERELEASE_ID" >> $GITHUB_OUTPUT
 
+      - name: 版本预检查
+        run: |
+          echo "🔍 版本预检查..."
+          ROOT_VERSION=$(node -p "require('./package.json').version")
+          CLIENT_VERSION=$(node -p "require('./packages/client/package.json').version")
+          SERVER_VERSION=$(node -p "require('./packages/server/package.json').version")
+
+          echo "当前版本状态："
+          echo "   - 根目录 (bestmcp): $ROOT_VERSION"
+          echo "   - Client (@bestmcp/client): $CLIENT_VERSION"
+          echo "   - Server (@bestmcp/server): $SERVER_VERSION"
+
+          if [ "$ROOT_VERSION" != "$CLIENT_VERSION" ] || [ "$ROOT_VERSION" != "$SERVER_VERSION" ]; then
+            echo "❌ 版本不同步！正在自动同步..."
+            TARGET_VERSION="$ROOT_VERSION"
+
+            # 更新子包版本
+            npm version "$TARGET_VERSION" --no-git-tag-version --workspaces-update false
+            cd packages/client && npm version "$TARGET_VERSION" --no-git-tag-version && cd ../..
+            cd packages/server && npm version "$TARGET_VERSION" --no-git-tag-version && cd ../..
+
+            echo "✅ 版本已同步到: $TARGET_VERSION"
+          else
+            echo "✅ 版本同步正常"
+          fi
+
+      - name: 检查目标版本冲突
+        id: version-check
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
+          echo "🔍 检查目标版本 $TARGET_VERSION 是否已存在..."
+
+          # 配置临时认证（只用于检查）
+          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc_temp
+          npm config set registry https://registry.npmjs.org/
+          export npm_config_userconfig=~/.npmrc_temp
+
+          CONFLICTS=0
+
+          # 检查各个包的版本是否存在
+          for PKG in "bestmcp" "@bestmcp/client" "@bestmcp/server"; do
+            if npm view "$PKG@$TARGET_VERSION" --json 2>/dev/null | grep -q '"name"'; then
+              echo "⚠️  $PKG@$TARGET_VERSION 已存在于 npm registry"
+              CONFLICTS=$((CONFLICTS + 1))
+            else
+              echo "✅ $PKG@$TARGET_VERSION 可用"
+            fi
+          done
+
+          # 清理临时配置
+          rm -f ~/.npmrc_temp
+
+          echo "conflicts=$CONFLICTS" >> $GITHUB_OUTPUT
+
+          if [ $CONFLICTS -gt 0 ]; then
+            echo "⚠️  检测到 $CONFLICTS 个版本冲突，但将强制发布"
+          fi
+
       - name: 发布
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
+          CONFLICTS="${{ steps.version-check.outputs.conflicts }}"
           RELEASE_CMD="npx release-it --ci --verbose"
 
           if [ "${{ steps.parse-version.outputs.version_type }}" = "release" ]; then
@@ -156,6 +217,7 @@ jobs:
           echo "   - 预发布ID: ${{ steps.parse-version.outputs.prerelease_id }}"
           echo "   - 当前分支: ${{ github.ref_name }}"
           echo "   - 预演模式: ${{ github.event.inputs.dry_run }}"
+          echo "   - 版本冲突数: $CONFLICTS"
           echo "   - 执行命令: $RELEASE_CMD"
           echo ""
 
@@ -185,6 +247,11 @@ jobs:
           echo "🧹 清理 npm 缓存..."
           npm cache clean --force 2>/dev/null || true
 
+          # 如果存在冲突，准备强制发布
+          if [ "$CONFLICTS" -gt 0 ]; then
+            echo "⚠️  检测到版本冲突，将使用强制发布模式"
+          fi
+
           # 执行发布命令
           echo "🚀 执行发布命令..."
 
@@ -196,6 +263,7 @@ jobs:
             echo "   - 检查版本号是否冲突"
             echo "   - 检查网络连接和权限"
             echo "   - 验证包版本配置"
+            echo "   - 版本冲突数: $CONFLICTS"
 
             # 输出详细的 npm 调试信息
             echo ""
@@ -204,6 +272,11 @@ jobs:
             echo ""
             echo "📋 npm 错误日志（最近5条）："
             ls -la /home/runner/.npm/_logs/ 2>/dev/null | tail -5 || echo "无法访问日志目录"
+
+            # 输出具体的 npm 日志内容
+            echo ""
+            echo "📋 最新 npm 错误日志内容："
+            find /home/runner/.npm/_logs/ -name "*debug-0.log" -exec tail -20 {} \; 2>/dev/null | head -50 || echo "无法读取日志内容"
 
             exit 1
           fi
