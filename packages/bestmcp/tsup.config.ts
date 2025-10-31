@@ -5,7 +5,7 @@ export default defineConfig({
     index: "src/index.ts",
   },
   format: ["cjs", "esm"],
-  dts: true,
+  dts: false,
   clean: false,
   sourcemap: true,
   external: ["@modelcontextprotocol/sdk", "reflect-metadata", "zod", "@bestmcp/server", "@bestmcp/client"],
@@ -27,7 +27,7 @@ export default defineConfig({
         legacyDecorator: true,
       },
       loose: false,
-      externalHelpers: true,
+      externalHelpers: false,
     },
     logger: {
       setName: () => {},
