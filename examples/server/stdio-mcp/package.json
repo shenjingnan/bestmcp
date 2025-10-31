@@ -1,6 +1,6 @@
 {
   "name": "calculator-mcp",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Calculator MCP",
   "main": "index.js",
   "scripts": {
