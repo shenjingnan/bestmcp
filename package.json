@@ -25,7 +25,6 @@
     "dev:all": "pnpm dev:packages & pnpm dev:examples",
     "dev:docs": "cd docs && pnpm run dev",
     "clean": "pnpm -r --filter './packages/**' clean",
-    "clean:packages": "pnpm -r --filter './packages/**' clean",
     "test": "vitest run",
     "test:silent": "vitest run --silent",
     "test:coverage": "vitest run --coverage",
