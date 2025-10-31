@@ -25,15 +25,15 @@
     "dev:all": "pnpm dev:packages & pnpm dev:examples",
     "dev:docs": "cd docs && pnpm run dev",
     "clean": "pnpm -r --filter './packages/**' clean",
-    "test": "vitest run",
-    "test:silent": "vitest run --silent",
-    "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest",
-    "type:check": "tsc --noEmit",
-    "spell:check": "cspell \"**/*.{ts,js,json,md,yaml}\"",
+    "test": "vitest run --config config/vitest.config.ts",
+    "test:silent": "vitest run --silent --config config/vitest.config.ts",
+    "test:coverage": "vitest run --coverage --config config/vitest.config.ts",
+    "test:watch": "vitest --config config/vitest.config.ts",
+    "type:check": "tsc --noEmit --project config/tsconfig.json",
+    "spell:check": "cspell --config config/cspell.json \"**/*.{ts,js,json,md,yaml}\"",
     "check": "biome check .",
     "check:fix": "biome check --write --unsafe .",
-    "release": "release-it"
+    "release": "release-it --config config/.release-it.json"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",

@@ -228,8 +228,8 @@ import { z, type ZodSchema } from "zod";
 
 #### 配置说明
 
-- **TypeScript**: `tsconfig.json` 中启用了 `"verbatimModuleSyntax": true`
-- **Biome**: `biome.json` 中配置了 `"useImportType": { "style": "separatedType" }`
+- **TypeScript**: `config/tsconfig.json` 中启用了 `"verbatimModuleSyntax": true`
+- **Biome**: `config/biome.json` 中配置了 `"useImportType": { "style": "separatedType" }`
 - **自动修复**: 使用 `pnpm check:fix` 可以自动修复大部分导入问题
 - **导入顺序**: Biome 会自动将类型导入排在值导入之前
 
@@ -252,7 +252,7 @@ import { z, type ZodSchema } from "zod";
 ### 代码质量工具
 
 - 使用 **Biome** 进行代码格式化和 linting
-- 配置文件：`biome.json`
+- 配置文件：`config/biome.json`
 - 支持自动导入排序和代码修复
 - 使用 **cspell** 进行拼写检查
 

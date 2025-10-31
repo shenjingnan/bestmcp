@@ -109,7 +109,7 @@ import { BestMCP, Tool, Param } from "bestmcp";
 
 ## 配置说明
 
-### TypeScript 配置 (tsconfig.json)
+### TypeScript 配置 (config/tsconfig.json)
 
 ```json
 {
@@ -126,7 +126,7 @@ import { BestMCP, Tool, Param } from "bestmcp";
 }
 ```
 
-### Vitest 配置 (vitest.config.ts)
+### Vitest 配置 (config/vitest.config.ts)
 
 ```typescript
 export default defineConfig({
@@ -153,7 +153,7 @@ export default defineConfig({
 
 ### 1. 更新 TypeScript 配置
 
-在 `tsconfig.json` 中添加新的路径映射：
+在 `config/tsconfig.json` 中添加新的路径映射：
 
 ```json
 {
@@ -168,7 +168,7 @@ export default defineConfig({
 
 ### 2. 更新 Vitest 配置
 
-在 `vitest.config.ts` 中添加对应的别名解析：
+在 `config/vitest.config.ts` 中添加对应的别名解析：
 
 ```typescript
 export default defineConfig({
@@ -222,4 +222,4 @@ pnpm check:fix
 
 ### 5. **IDE 支持**
 
-确保你的 IDE 支持 TypeScript 路径别名配置，大多数现代 IDE (如 VS Code) 会自动识别 `tsconfig.json` 中的路径配置。
+确保你的 IDE 支持 TypeScript 路径别名配置，大多数现代 IDE (如 VS Code) 会自动识别 `config/tsconfig.json` 中的路径配置。
