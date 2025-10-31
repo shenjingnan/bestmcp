@@ -77,6 +77,13 @@ jobs:
           npm install -g npm@latest
           pnpm install --frozen-lockfile
 
+      - name: 配置 npm 认证
+        run: |
+          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc
+          npm config set registry https://registry.npmjs.org/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: 配置 Git 用户
         run: |
           git config --global user.name "github-actions[bot]"
@@ -114,6 +121,7 @@ jobs:
       - name: 发布
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
           RELEASE_CMD="npx release-it --ci"
@@ -144,8 +152,15 @@ jobs:
           echo "🔍 环境检查："
           echo "   - Node版本: $(node --version)"
           echo "   - pnpm版本: $(pnpm --version)"
+          echo "   - npm版本: $(npm --version)"
           echo "   - 当前分支: $(git branch --show-current)"
           echo "   - Git状态: $(git status --porcelain | wc -l) 个文件有修改"
+          echo ""
+
+          # 验证认证配置
+          echo "🔐 认证检查："
+          echo "   - npm registry: $(npm config get registry)"
+          echo "   - npm 认证状态: $(npm whoami 2>/dev/null || echo '未认证')"
           echo ""
 
           # 执行发布命令
