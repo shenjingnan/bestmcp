@@ -127,10 +127,13 @@ export class NewError extends Error {
 
 ```bash
 # 构建核心包
-pnpm build:core
-
-# 完整构建（包括类型定义）
 pnpm build
+
+# 构建所有 packages/* 项目
+pnpm build:packages
+
+# 完整构建（包括 examples）
+pnpm build:all
 ```
 
 ### 发布前检查
@@ -185,7 +188,7 @@ console.log('调试信息:', data);
   "type": "node",
   "request": "launch",
   "name": "Debug BestMCP",
-  "program": "${workspaceFolder}/packages/server/src/index.ts",
-  "outFiles": ["${workspaceFolder}/packages/server/dist/**/*.js"]
+  "program": "${workspaceFolder}/packages/bestmcp/src/index.ts",
+  "outFiles": ["${workspaceFolder}/packages/bestmcp/dist/**/*.js"]
 }
 ```

@@ -1,7 +1,7 @@
 {
   "name": "bestmcp-workspace",
   "version": "0.0.7",
-  "description": "BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架 - Workspace 管理",
+  "description": "BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架",
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
   "repository": {
