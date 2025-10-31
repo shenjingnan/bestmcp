@@ -19,7 +19,9 @@
     "publishArgs": ["--access", "public"],
     "skipChecks": true,
     "registry": "https://registry.npmjs.org/",
-    "force": true
+    "force": true,
+    "ignoreVersion": false,
+    "allowSameVersion": false
   },
   "plugins": {
     "@release-it-plugins/workspaces": {
@@ -28,7 +30,10 @@
       "updateRootVersion": true,
       "includeWorkspaceRoot": true,
       "version": true,
-      "forcePublish": true
+      "forcePublish": true,
+      "syncVersions": true,
+      "dependencies": false,
+      "devDependencies": false
     },
     "@release-it/conventional-changelog": {
       "preset": "conventionalcommits",

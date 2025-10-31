@@ -79,8 +79,19 @@ jobs:
 
       - name: 配置 npm 认证
         run: |
+          # 清理可能存在的过时配置
+          npm config delete always-auth 2>/dev/null || true
+          npm config delete _auth 2>/dev/null || true
+          npm config delete authtoken 2>/dev/null || true
+
+          # 设置标准认证配置
           echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc
           npm config set registry https://registry.npmjs.org/
+
+          # 验证配置
+          echo "✅ npm 配置完成:"
+          echo "   - registry: $(npm config get registry)"
+          echo "   - always-auth: $(npm config get always-auth 2>/dev/null || echo '未设置')"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -124,7 +135,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
-          RELEASE_CMD="npx release-it --ci"
+          RELEASE_CMD="npx release-it --ci --verbose"
 
           if [ "${{ steps.parse-version.outputs.version_type }}" = "release" ]; then
             # 正式版发布
@@ -163,16 +174,37 @@ jobs:
           echo "   - npm 认证状态: $(npm whoami 2>/dev/null || echo '未认证')"
           echo ""
 
+          # 检查当前包版本状态
+          echo "📦 当前包版本状态："
+          echo "   - 根目录版本: $(node -p "require('./package.json').version")"
+          echo "   - Client版本: $(node -p "require('./packages/client/package.json').version")"
+          echo "   - Server版本: $(node -p "require('./packages/server/package.json').version")"
+          echo ""
+
+          # 清理 npm 缓存（避免缓存问题）
+          echo "🧹 清理 npm 缓存..."
+          npm cache clean --force 2>/dev/null || true
+
           # 执行发布命令
           echo "🚀 执行发布命令..."
 
           # 执行发布并捕获错误
           if ! eval "$RELEASE_CMD"; then
             echo "❌ 发布失败！"
-            echo "📋 错误信息："
-            echo "   - 可能原因：版本号冲突、构建失败、网络问题或权限问题"
-            echo "   - 检查日志中的详细错误信息"
-            echo "   - 尝试在本地执行相同命令进行调试"
+            echo "📋 错误诊断："
+            echo "   - 检查 npm 日志: /home/runner/.npm/_logs/"
+            echo "   - 检查版本号是否冲突"
+            echo "   - 检查网络连接和权限"
+            echo "   - 验证包版本配置"
+
+            # 输出详细的 npm 调试信息
+            echo ""
+            echo "🔍 详细诊断信息："
+            npm config list
+            echo ""
+            echo "📋 npm 错误日志（最近5条）："
+            ls -la /home/runner/.npm/_logs/ 2>/dev/null | tail -5 || echo "无法访问日志目录"
+
             exit 1
           fi
 
