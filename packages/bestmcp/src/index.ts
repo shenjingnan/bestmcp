@@ -1,8 +1,7 @@
-// 核心功能
-
 // 客户端相关
 export type { MCPServerConfig, MCPServerInfo, ToolDefinition, ToolResult } from "@bestmcp/client";
 export { BestMCPClient, Client, MCPConnectionError, MCPToolError } from "@bestmcp/client";
+
 // 服务端相关
 export type {
   BestMCPConfig as Config,
