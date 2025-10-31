@@ -1,7 +1,7 @@
 {
-  "name": "bestmcp",
+  "name": "bestmcp-workspace",
   "version": "0.0.7",
-  "description": "BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架",
+  "description": "BestMCP 是一个为 TypeScript 设计的 Model Context Protocol (MCP) 服务器框架 - Workspace 管理",
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -11,34 +11,20 @@
   "keywords": [
     "mcp",
     "modelcontextprotocol",
-    "typescript"
-  ],
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist/**/*",
-    "README.md",
-    "LICENSE"
+    "typescript",
+    "monorepo"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.build.json --declaration --emitDeclarationOnly --declarationMap && tsup",
-    "dev": "tsup --watch",
-    "clean": "rm -rf dist",
+    "build": "pnpm build:packages",
     "build:packages": "pnpm -r --filter './packages/**' build",
     "build:examples": "pnpm -r --filter './examples/**' build",
-    "build:all": "pnpm build && pnpm build:packages && pnpm build:examples",
+    "build:all": "pnpm build:packages && pnpm build:examples",
+    "dev": "pnpm dev:packages",
     "dev:packages": "pnpm -r --filter './packages/**' dev",
     "dev:examples": "pnpm -r --filter './examples/**' dev",
-    "dev:all": "pnpm dev & pnpm dev:packages & pnpm dev:examples",
+    "dev:all": "pnpm dev:packages & pnpm dev:examples",
     "dev:docs": "cd docs && pnpm run dev",
+    "clean": "pnpm -r --filter './packages/**' clean",
     "clean:packages": "pnpm -r --filter './packages/**' clean",
     "test": "vitest run",
     "test:silent": "vitest run --silent",
@@ -48,14 +34,7 @@
     "spell:check": "cspell \"**/*.{ts,js,json,md,yaml}\"",
     "check": "biome check .",
     "check:fix": "biome check --write --unsafe .",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm type:check && pnpm check:fix"
-  },
-  "dependencies": {
-    "@bestmcp/client": "workspace:*",
-    "@bestmcp/server": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.18.2",
-    "reflect-metadata": "^0.2.2",
-    "zod": "^3.25.76"
+    "release": "release-it"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",

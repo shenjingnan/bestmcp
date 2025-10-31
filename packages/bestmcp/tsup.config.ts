@@ -5,7 +5,7 @@ export default defineConfig({
     index: "src/index.ts",
   },
   format: ["cjs", "esm"],
-  dts: false,
+  dts: true,
   clean: false,
   sourcemap: true,
   external: ["@modelcontextprotocol/sdk", "reflect-metadata", "zod", "@bestmcp/server", "@bestmcp/client"],
@@ -38,5 +38,5 @@ export default defineConfig({
       log: () => {},
     },
   },
-  onSuccess: 'echo "✅ bestmcp 根包构建完成"',
+  onSuccess: 'echo "✅ bestmcp 包构建完成"',
 });

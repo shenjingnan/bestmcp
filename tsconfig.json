@@ -30,11 +30,11 @@
       "@bestmcp/server/*": ["packages/server/src/*"],
       "@bestmcp/client": ["packages/client/src"],
       "@bestmcp/client/*": ["packages/client/src/*"],
-      "bestmcp": ["src"],
-      "bestmcp/*": ["src/*"]
+      "bestmcp": ["packages/bestmcp/src"],
+      "bestmcp/*": ["packages/bestmcp/src/*"]
     }
   },
-  "include": ["packages/**/*.ts", "examples/**/*.ts", "src/**/*.ts"],
+  "include": ["packages/**/*.ts", "examples/**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": true
