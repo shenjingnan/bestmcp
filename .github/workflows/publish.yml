@@ -161,7 +161,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           TARGET_VERSION="${{ steps.parse-version.outputs.target_version }}"
-          echo "🔍 检查目标版本 $TARGET_VERSION 是否已存在..."
+          VERSION_TYPE="${{ steps.parse-version.outputs.version_type }}"
+          echo "🔍 检查目标版本 $TARGET_VERSION (类型: $VERSION_TYPE) 是否已存在..."
 
           # 配置临时认证（只用于检查）
           echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc_temp
@@ -170,15 +171,23 @@ jobs:
 
           CONFLICTS=0
 
-          # 检查各个包的版本是否存在
-          for PKG in "bestmcp" "@bestmcp/client" "@bestmcp/server"; do
-            if npm view "$PKG@$TARGET_VERSION" --json 2>/dev/null | grep -q '"name"'; then
-              echo "⚠️  $PKG@$TARGET_VERSION 已存在于 npm registry"
-              CONFLICTS=$((CONFLICTS + 1))
-            else
-              echo "✅ $PKG@$TARGET_VERSION 可用"
-            fi
-          done
+          # 对于预发布版，使用不同的检查策略
+          if [ "$VERSION_TYPE" = "prerelease" ]; then
+            echo "📦 预发布版检查：跳过 npm registry 检查，允许覆盖发布"
+            echo "ℹ️  预发布版本通常不存在于 registry，这是正常的"
+          else
+            echo "📦 正式版检查：验证版本唯一性"
+            # 检查各个包的版本是否存在
+            for PKG in "bestmcp" "@bestmcp/client" "@bestmcp/server"; do
+              echo "   检查 $PKG@$TARGET_VERSION..."
+              if npm view "$PKG@$TARGET_VERSION" --json --silent 2>/dev/null | grep -q '"name"'; then
+                echo "⚠️  $PKG@$TARGET_VERSION 已存在于 npm registry"
+                CONFLICTS=$((CONFLICTS + 1))
+              else
+                echo "✅ $PKG@$TARGET_VERSION 可用"
+              fi
+            done
+          fi
 
           # 清理临时配置
           rm -f ~/.npmrc_temp
@@ -187,6 +196,8 @@ jobs:
 
           if [ $CONFLICTS -gt 0 ]; then
             echo "⚠️  检测到 $CONFLICTS 个版本冲突，但将强制发布"
+          else
+            echo "✅ 版本检查通过"
           fi
 
       - name: 发布
@@ -228,6 +239,22 @@ jobs:
           echo "   - npm版本: $(npm --version)"
           echo "   - 当前分支: $(git branch --show-current)"
           echo "   - Git状态: $(git status --porcelain | wc -l) 个文件有修改"
+
+          # 详细的 Git 状态检查
+          echo ""
+          echo "🔍 Git 详细状态："
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "   - 未提交的文件："
+            git status --porcelain | head -10 | while read line; do
+              echo "     $line"
+            done
+            echo "   - 注意：release-it 会自动提交这些更改"
+          else
+            echo "   - ✅ 工作目录干净"
+          fi
+
+          echo "   - 最后一次提交: $(git log -1 --oneline)"
+          echo "   - 远程分支状态: $(git branch -r --contains HEAD | wc -l) 个远程分支包含当前提交"
           echo ""
 
           # 验证认证配置
@@ -250,6 +277,18 @@ jobs:
           # 如果存在冲突，准备强制发布
           if [ "$CONFLICTS" -gt 0 ]; then
             echo "⚠️  检测到版本冲突，将使用强制发布模式"
+          fi
+
+          # 检查是否有未提交的更改，并自动处理
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "📝 发现未提交的更改，准备自动提交..."
+            git add -A
+            git commit -m "chore: 发布前自动提交版本更新
+
+            🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+            Co-Authored-By: Claude <noreply@anthropic.com>"
+            echo "✅ 已自动提交版本更改"
           fi
 
           # 执行发布命令

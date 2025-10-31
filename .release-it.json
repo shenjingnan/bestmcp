@@ -3,8 +3,8 @@
     "commitMessage": "chore: release v${version}",
     "tagName": "v${version}",
     "pushArgs": ["--follow-tags"],
-    "requireCleanWorkingDir": true,
-    "requireUpstream": true,
+    "requireCleanWorkingDir": false,
+    "requireUpstream": false,
     "commit": true,
     "tag": true,
     "push": true
