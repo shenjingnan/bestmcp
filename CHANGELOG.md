@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.0-beta.0](https://github.com/shenjingnan/bestmcp/compare/v0.0.6...v0.1.0-beta.0) (2025-10-31)
+
+### Features
+
+* **client:** 新增 @bestmcp/client 客户端库 ([#13](https://github.com/shenjingnan/bestmcp/issues/13)) ([e29e4d5](https://github.com/shenjingnan/bestmcp/commit/e29e4d5eaba0eab80892332be946ebf64ff4b72c))
+* **release:** 完成发布重构和包名迁移 ([#21](https://github.com/shenjingnan/bestmcp/issues/21)) ([6ea659a](https://github.com/shenjingnan/bestmcp/commit/6ea659ab41d218f78fe5b2bc6ba7c1d33911b955))
+
+### Bug Fixes
+
+* 完善 GitHub Actions 发布工作流 ([5ffb088](https://github.com/shenjingnan/bestmcp/commit/5ffb0888a6945c48e0a4c0bcb3854117eaa14779))
+
 ## [0.0.6](https://github.com/shenjingnan/bestmcp/compare/v0.0.5...v0.0.6) (2025-10-24)
 
 ### Features

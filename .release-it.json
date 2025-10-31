@@ -48,9 +48,22 @@
     }
   },
   "hooks": {
-    "before:init": ["pnpm audit --audit-level moderate", "pnpm test", "pnpm type:check", "pnpm check:fix", "echo '🔍 检查版本同步状态...' && node -e \"const root=require('./package.json').version, client=require('./packages/client/package.json').version, server=require('./packages/server/package.json').version; console.log('版本状态:', {root, client, server}); if(root!==client||root!==server) { console.error('❌ 版本不同步!'); process.exit(1); } else { console.log('✅ 版本同步正常'); }\""],
-    "before:release": ["pnpm clean", "pnpm build:packages", "echo '📦 发布前版本检查...' && node -e \"const root=require('./package.json').version, client=require('./packages/client/package.json').version, server=require('./packages/server/package.json').version; console.log('即将发布版本:', {root, client, server});\""],
-    "after:bump": ["pnpm build:packages", "echo '📝 版本号更新完成，验证同步...' && node -e \"const root=require('./package.json').version, client=require('./packages/client/package.json').version, server=require('./packages/server/package.json').version; console.log('更新后版本:', {root, client, server});\""],
+    "before:init": [
+      "pnpm audit --audit-level moderate",
+      "pnpm test",
+      "pnpm type:check",
+      "pnpm check:fix",
+      "echo '🔍 检查版本同步状态...' && node -e \"const root=require('./package.json').version, client=require('./packages/client/package.json').version, server=require('./packages/server/package.json').version; console.log('版本状态:', {root, client, server}); if(root!==client||root!==server) { console.error('❌ 版本不同步!'); process.exit(1); } else { console.log('✅ 版本同步正常'); }\""
+    ],
+    "before:release": [
+      "pnpm clean",
+      "pnpm build:packages",
+      "echo '📦 发布前版本检查...' && node -e \"const root=require('./package.json').version, client=require('./packages/client/package.json').version, server=require('./packages/server/package.json').version; console.log('即将发布版本:', {root, client, server});\""
+    ],
+    "after:bump": [
+      "pnpm build:packages",
+      "echo '📝 版本号更新完成，验证同步...' && node -e \"const root=require('./package.json').version, client=require('./packages/client/package.json').version, server=require('./packages/server/package.json').version; console.log('更新后版本:', {root, client, server});\""
+    ],
     "after:release": ["echo \"🎉 版本 v${version} 发布完成！\""]
   }
 }
