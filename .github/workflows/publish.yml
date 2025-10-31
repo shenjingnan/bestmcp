@@ -142,10 +142,9 @@ jobs:
           echo "   - Server (@bestmcp/server): $SERVER_VERSION"
 
           if [ "$ROOT_VERSION" != "$CLIENT_VERSION" ] || [ "$ROOT_VERSION" != "$SERVER_VERSION" ]; then
-            echo "❌ 版本不同步！正在自动同步..."
-            TARGET_VERSION="$ROOT_VERSION"
+            echo "❌ 版本不同步！正在自动同步到指定版本: $TARGET_VERSION"
 
-            # 更新子包版本
+            # 更新所有包版本到用户指定的版本
             npm version "$TARGET_VERSION" --no-git-tag-version --workspaces-update false
             cd packages/client && npm version "$TARGET_VERSION" --no-git-tag-version && cd ../..
             cd packages/server && npm version "$TARGET_VERSION" --no-git-tag-version && cd ../..
@@ -269,6 +268,18 @@ jobs:
           echo "   - Client版本: $(node -p "require('./packages/client/package.json').version")"
           echo "   - Server版本: $(node -p "require('./packages/server/package.json').version")"
           echo ""
+
+          # 确保所有包版本同步到用户指定的版本
+          echo "🔧 确保版本同步到用户指定版本: $TARGET_VERSION"
+          npm version "$TARGET_VERSION" --no-git-tag-version --workspaces-update false
+          cd packages/client && npm version "$TARGET_VERSION" --no-git-tag-version && cd ../..
+          cd packages/server && npm version "$TARGET_VERSION" --no-git-tag-version && cd ../..
+
+          echo "✅ 所有包版本已同步到: $TARGET_VERSION"
+          echo "📦 最终版本状态："
+          echo "   - 根目录版本: $(node -p "require('./package.json').version")"
+          echo "   - Client版本: $(node -p "require('./packages/client/package.json').version")"
+          echo "   - Server版本: $(node -p "require('./packages/server/package.json').version")"
 
           # 清理 npm 缓存（避免缓存问题）
           echo "🧹 清理 npm 缓存..."

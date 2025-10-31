@@ -36,7 +36,7 @@
       "devDependencies": false,
       "publish": {
         "packages": ["packages/server", "packages/client"],
-        "root": false
+        "root": true
       }
     },
     "@release-it/conventional-changelog": {
