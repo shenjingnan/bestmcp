@@ -18,14 +18,17 @@
     "publish": true,
     "publishArgs": ["--access", "public"],
     "skipChecks": true,
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "force": true
   },
   "plugins": {
     "@release-it-plugins/workspaces": {
       "workspaces": ["packages/server", "packages/client"],
       "rootWorkspace": true,
       "updateRootVersion": true,
-      "includeWorkspaceRoot": true
+      "includeWorkspaceRoot": true,
+      "version": true,
+      "forcePublish": true
     },
     "@release-it/conventional-changelog": {
       "preset": "conventionalcommits",
