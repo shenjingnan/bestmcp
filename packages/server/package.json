@@ -1,6 +1,6 @@
 {
   "name": "@bestmcp/server",
-  "version": "0.0.7",
+  "version": "0.0.8-beta.0",
   "description": "BestMCP 服务器库",
   "main": "dist/index.js",
   "module": "dist/index.js",
