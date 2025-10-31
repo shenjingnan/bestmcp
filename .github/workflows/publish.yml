@@ -128,15 +128,15 @@ jobs:
 
           # 创建临时的 changeset 文件来指定版本号
           mkdir -p .changeset
-          cat > .changeset/temp-release-$(date +%s).md << EOF
----
-"bestmcp": $VERSION_TYPE
-"@bestmcp/server": $VERSION_TYPE
-"@bestmcp/client": $VERSION_TYPE
----
-
-发布指定版本 $TARGET_VERSION
-EOF
+          TIMESTAMP=$(date +%s)
+          CHANGESET_FILE=".changeset/temp-release-$TIMESTAMP.md"
+          echo "---" > $CHANGESET_FILE
+          echo "\"bestmcp\": $VERSION_TYPE" >> $CHANGESET_FILE
+          echo "\"@bestmcp/server\": $VERSION_TYPE" >> $CHANGESET_FILE
+          echo "\"@bestmcp/client\": $VERSION_TYPE" >> $CHANGESET_FILE
+          echo "---" >> $CHANGESET_FILE
+          echo "" >> $CHANGESET_FILE
+          echo "发布指定版本 $TARGET_VERSION" >> $CHANGESET_FILE
 
           echo "✅ Changeset 文件已创建"
 
