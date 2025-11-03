@@ -30,6 +30,10 @@
   ],
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shenjingnan/bestmcp.git"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2"
   },
