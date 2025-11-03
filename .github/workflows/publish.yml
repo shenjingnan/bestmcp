@@ -96,13 +96,13 @@ jobs:
 
           # 更新所有包的版本号
           echo "🔄 更新 packages/bestmcp/package.json"
-          npm version "$TARGET_VERSION" --no-git-tag-version --prefix packages/bestmcp
+          npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version --prefix packages/bestmcp
 
           echo "🔄 更新 packages/client/package.json"
-          npm version "$TARGET_VERSION" --no-git-tag-version --prefix packages/client
+          npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version --prefix packages/client
 
           echo "🔄 更新 packages/server/package.json"
-          npm version "$TARGET_VERSION" --no-git-tag-version --prefix packages/server
+          npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version --prefix packages/server
 
           echo "✅ 所有包版本已更新为: $TARGET_VERSION"
 
