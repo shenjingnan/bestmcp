@@ -82,8 +82,90 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: 手动更新版本号
+        run: |
+          echo "📦 手动更新版本号为: ${{ github.event.inputs.target_version }}"
+
+          TARGET_VERSION="${{ github.event.inputs.target_version }}"
+
+          # 验证版本号格式
+          if [[ ! "$TARGET_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(beta|rc)\.[0-9]+)?$ ]]; then
+            echo "❌ 版本号格式无效: $TARGET_VERSION"
+            exit 1
+          fi
+
+          # 更新所有包的版本号
+          echo "🔄 更新 packages/bestmcp/package.json"
+          npm version "$TARGET_VERSION" --no-git-tag-version --prefix packages/bestmcp
+
+          echo "🔄 更新 packages/client/package.json"
+          npm version "$TARGET_VERSION" --no-git-tag-version --prefix packages/client
+
+          echo "🔄 更新 packages/server/package.json"
+          npm version "$TARGET_VERSION" --no-git-tag-version --prefix packages/server
+
+          echo "✅ 所有包版本已更新为: $TARGET_VERSION"
+
       - name: 发布
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm changeset add --empty && pnpm changeset version && pnpm changeset publish
+          echo "🚀 开始发布版本: ${{ github.event.inputs.target_version }}"
+
+          TARGET_VERSION="${{ github.event.inputs.target_version }}"
+
+          # 构建所有包
+          pnpm build:packages
+
+          # 仅发布，不进行版本计算（因为我们已经手动设置了版本）
+          if [[ "${{ github.event.inputs.dry_run }}" == "true" ]]; then
+            echo "🔍 预演模式：检查将要发布的包..."
+            pnpm changeset publish --dry-run
+          else
+            echo "📤 发布到 npm..."
+
+            # 确定发布标签
+            if [[ "$TARGET_VERSION" =~ -(beta|rc)\.[0-9]+$ ]]; then
+              PUBLISH_TAG="beta"
+              echo "📋 检测到预发布版本，使用标签: $PUBLISH_TAG"
+            else
+              PUBLISH_TAG="latest"
+              echo "📋 检测到正式版本，使用标签: $PUBLISH_TAG"
+            fi
+
+            # 提交版本更新到 git
+            git add packages/*/package.json
+            git commit -m "chore: 发布版本 $TARGET_VERSION [skip ci]"
+
+            # 直接发布各个包
+            for pkg in packages/*/; do
+              if [[ -d "$pkg" && -f "$pkg/package.json" ]]; then
+                pkg_name=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$pkg/package.json', 'utf8')).name)")
+                echo "📦 发布包: $pkg_name@$TARGET_VERSION"
+                cd "$pkg"
+                npm publish --tag "$PUBLISH_TAG" --access public
+                cd - > /dev/null
+              fi
+            done
+
+            # 手动创建 git 标签
+            git tag -a "bestmcp@$TARGET_VERSION" -m "bestmcp@$TARGET_VERSION"
+            git tag -a "@bestmcp/client@$TARGET_VERSION" -m "@bestmcp/client@$TARGET_VERSION"
+            git tag -a "@bestmcp/server@$TARGET_VERSION" -m "@bestmcp/server@$TARGET_VERSION"
+
+            # 推送提交和标签
+            CURRENT_BRANCH="${{ github.ref_name }}"
+            if [[ "$CURRENT_BRANCH" == "main" ]]; then
+              echo "🔄 推送变更到 main 分支..."
+              git push origin main
+            else
+              echo "🔄 推送变更到当前分支: $CURRENT_BRANCH"
+              git push origin "$CURRENT_BRANCH"
+            fi
+
+            git push origin "bestmcp@$TARGET_VERSION"
+            git push origin "@bestmcp/client@$TARGET_VERSION"
+            git push origin "@bestmcp/server@$TARGET_VERSION"
+
+            echo "✅ 发布完成，已创建并推送 git 标签"
+          fi
