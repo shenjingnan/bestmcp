@@ -14,8 +14,8 @@ on:
         type: boolean
 
 permissions:
+  contents: write
   id-token: write
-  contents: read
 
 jobs:
   npm-release:
@@ -26,38 +26,18 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: write
-      issues: write
-      pull-requests: write
       id-token: write
+    env:
+      TARGET_VERSION: ${{ github.event.inputs.target_version }}
+      IS_DRY_RUN: ${{ github.event.inputs.dry_run }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NPM_CONFIG_PROVENANCE: true
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: 验证
-        run: |
-          echo "当前分支: ${{ github.ref_name }}"
-          echo "目标版本: ${{ github.event.inputs.target_version }}"
-          echo "预演模式: ${{ github.event.inputs.dry_run }}"
-
-          # 验证版本号格式
-          TARGET_VERSION="${{ github.event.inputs.target_version }}"
-          if [[ ! "$TARGET_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(beta|rc)\.[0-9]+)?$ ]]; then
-            echo "❌ 版本号格式无效，请使用以下格式之一："
-            echo "   - 正式版: 1.0.0"
-            echo "   - Beta版: 1.0.0-beta.0"
-            echo "   - RC版: 1.0.0-rc.0"
-            exit 1
-          fi
-
-          # 检查分支权限（允许在feature分支进行测试发布）
-          if [[ "$TARGET_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] && [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
-            if [ "${{ github.ref_name }}" != "main" ]; then
-              echo "❌ 正式版发布必须在主分支进行"
-              exit 1
-            fi
-          fi
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v4
@@ -82,90 +62,64 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: 手动更新版本号
+      - name: 更新版本号
         run: |
-          echo "📦 手动更新版本号为: ${{ github.event.inputs.target_version }}"
+          echo "📦 更新版本号到: $TARGET_VERSION"
 
-          TARGET_VERSION="${{ github.event.inputs.target_version }}"
+          for pkg in packages/*/; do
+            if [[ -d "$pkg" && -f "$pkg/package.json" ]]; then
+              echo "🔄 $(basename "$pkg")"
+              npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version --prefix "$pkg"
+            fi
+          done
 
-          # 验证版本号格式
-          if [[ ! "$TARGET_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(beta|rc)\.[0-9]+)?$ ]]; then
-            echo "❌ 版本号格式无效: $TARGET_VERSION"
-            exit 1
-          fi
-
-          # 更新所有包的版本号
-          echo "🔄 更新 packages/bestmcp/package.json"
-          npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version --prefix packages/bestmcp
-
-          echo "🔄 更新 packages/client/package.json"
-          npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version --prefix packages/client
-
-          echo "🔄 更新 packages/server/package.json"
-          npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version --prefix packages/server
-
-          echo "✅ 所有包版本已更新为: $TARGET_VERSION"
-
-      - name: 发布
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 构建和发布
         run: |
-          echo "🚀 开始发布版本: ${{ github.event.inputs.target_version }}"
-
-          TARGET_VERSION="${{ github.event.inputs.target_version }}"
-
-          # 构建所有包
           pnpm build:packages
 
-          # 仅发布，不进行版本计算（因为我们已经手动设置了版本）
-          if [[ "${{ github.event.inputs.dry_run }}" == "true" ]]; then
-            echo "🔍 预演模式：检查将要发布的包..."
-            pnpm changeset publish --dry-run
+          if [[ "$TARGET_VERSION" =~ -(beta|rc)\.[0-9]+$ ]]; then
+            PUBLISH_TAG="beta"
           else
-            echo "📤 发布到 npm..."
+            PUBLISH_TAG="latest"
+          fi
 
-            # 确定发布标签
-            if [[ "$TARGET_VERSION" =~ -(beta|rc)\.[0-9]+$ ]]; then
-              PUBLISH_TAG="beta"
-              echo "📋 检测到预发布版本，使用标签: $PUBLISH_TAG"
-            else
-              PUBLISH_TAG="latest"
-              echo "📋 检测到正式版本，使用标签: $PUBLISH_TAG"
-            fi
-
-            # 提交版本更新到 git
-            git add packages/*/package.json
-            git commit -m "chore: 发布版本 $TARGET_VERSION [skip ci]"
-
-            # 直接发布各个包
+          if [[ "$IS_DRY_RUN" == "true" ]]; then
+            echo "🔍 预演模式: 将发布以下包到 $PUBLISH_TAG 标签"
             for pkg in packages/*/; do
               if [[ -d "$pkg" && -f "$pkg/package.json" ]]; then
                 pkg_name=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$pkg/package.json', 'utf8')).name)")
-                echo "📦 发布包: $pkg_name@$TARGET_VERSION"
+                echo "  - $pkg_name@$TARGET_VERSION"
+              fi
+            done
+            echo "✅ 预演完成"
+          else
+            echo "📤 发布到 npm ($PUBLISH_TAG 标签)..."
+
+            # 提交版本更新
+            git add packages/*/package.json
+            git commit -m "chore: 发布版本 $TARGET_VERSION [skip ci]"
+
+            # 发布所有包
+            for pkg in packages/*/; do
+              if [[ -d "$pkg" && -f "$pkg/package.json" ]]; then
+                pkg_name=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$pkg/package.json', 'utf8')).name)")
+                echo "📦 发布: $pkg_name"
                 cd "$pkg"
                 npm publish --tag "$PUBLISH_TAG" --access public
                 cd - > /dev/null
               fi
             done
 
-            # 手动创建 git 标签
+            # 创建并推送标签
+            echo "🏷️ 创建 Git 标签..."
             git tag -a "bestmcp@$TARGET_VERSION" -m "bestmcp@$TARGET_VERSION"
             git tag -a "@bestmcp/client@$TARGET_VERSION" -m "@bestmcp/client@$TARGET_VERSION"
             git tag -a "@bestmcp/server@$TARGET_VERSION" -m "@bestmcp/server@$TARGET_VERSION"
 
-            # 推送提交和标签
-            CURRENT_BRANCH="${{ github.ref_name }}"
-            if [[ "$CURRENT_BRANCH" == "main" ]]; then
-              echo "🔄 推送变更到 main 分支..."
-              git push origin main
-            else
-              echo "🔄 推送变更到当前分支: $CURRENT_BRANCH"
-              git push origin "$CURRENT_BRANCH"
-            fi
+            # 推送变更和标签
+            echo "🔄 推送到远程仓库..."
+            git push origin "${{ github.ref_name }}"
+            git push origin "bestmcp@$TARGET_VERSION" "@bestmcp/client@$TARGET_VERSION" "@bestmcp/server@$TARGET_VERSION"
 
-            git push origin "bestmcp@$TARGET_VERSION"
-            git push origin "@bestmcp/client@$TARGET_VERSION"
-            git push origin "@bestmcp/server@$TARGET_VERSION"
-
-            echo "✅ 发布完成，已创建并推送 git 标签"
+            echo "✅ 发布完成"
           fi
