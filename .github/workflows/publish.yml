@@ -30,8 +30,6 @@ jobs:
     env:
       TARGET_VERSION: ${{ github.event.inputs.target_version }}
       IS_DRY_RUN: ${{ github.event.inputs.dry_run }}
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      NPM_CONFIG_PROVENANCE: true
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
