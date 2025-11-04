@@ -1,10 +1,10 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "beta",
   "initialVersions": {
-    "bestmcp": "0.0.7",
-    "@bestmcp/client": "0.0.1",
-    "@bestmcp/server": "0.0.2"
+    "bestmcp": "0.1.1-beta.4",
+    "@bestmcp/client": "0.1.1-beta.4",
+    "@bestmcp/server": "0.1.1-beta.4"
   },
-  "changesets": []
+  "changesets": ["honest-hotels-swim", "setup-changesets"]
 }
