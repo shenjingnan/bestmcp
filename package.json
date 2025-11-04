@@ -34,8 +34,7 @@
     "check": "biome check .",
     "check:fix": "biome check --write --unsafe .",
     "changeset": "changeset",
-    "update-changelog": "tsx scripts/update-changelog.ts",
-    "version": "changeset version && tsx scripts/update-changelog.ts",
+    "version": "changeset version",
     "release": "pnpm build:packages && changeset publish"
   },
   "devDependencies": {
