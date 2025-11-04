@@ -1,6 +1,6 @@
 {
   "name": "calculator-mcp",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Calculator MCP",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "bestmcp": "workspace:*",
+    "bestmcp": "^1.0.0",
     "zod": "^3.25.0"
   },
   "packageManager": "pnpm@10.13.1"

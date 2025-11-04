@@ -1,6 +1,6 @@
 {
   "name": "@bestmcp/client",
-  "version": "0.0.1",
+  "version": "0.1.1-beta.4",
   "description": "BestMCP 客户端库",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -30,6 +30,10 @@
   ],
   "author": "shenjingnan <sjn.code@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shenjingnan/bestmcp.git"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2"
   },
