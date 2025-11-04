@@ -6,5 +6,8 @@
     "@bestmcp/client": "0.1.1-beta.4",
     "@bestmcp/server": "0.1.1-beta.4"
   },
-  "changesets": ["honest-hotels-swim", "setup-changesets"]
+  "changesets": [
+    "petite-parents-drop",
+    "setup-changesets"
+  ]
 }
