@@ -1,41 +1,26 @@
-name: NPM 发布
+name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      target_version:
-        description: "目标版本号 (例如: 1.0.0, 1.0.0-beta.0, 1.0.0-rc.0)"
-        required: true
-        type: string
-      dry_run:
-        description: "预演模式"
-        required: true
-        default: true
-        type: boolean
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
+  pull-requests: write
   id-token: write
 
 jobs:
-  npm-release:
-    name: NPM 发布
+  release:
+    name: Release
     runs-on: ubuntu-latest
-    concurrency:
-      group: npm-release-${{ github.ref }}
-      cancel-in-progress: false
-    permissions:
-      contents: write
-      id-token: write
-    env:
-      TARGET_VERSION: ${{ github.event.inputs.target_version }}
-      IS_DRY_RUN: ${{ github.event.inputs.dry_run }}
     steps:
-      - name: 检出代码
+      - name: Checkout Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v4
@@ -51,73 +36,15 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: 安装依赖
-        run: |
-          npm install -g npm@latest
-          pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
-      - name: 配置 Git 用户
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: 更新版本号
-        run: |
-          echo "📦 更新版本号到: $TARGET_VERSION"
-
-          for pkg in packages/*/; do
-            if [[ -d "$pkg" && -f "$pkg/package.json" ]]; then
-              echo "🔄 $(basename "$pkg")"
-              npm version "$TARGET_VERSION" --no-git-tag-version --allow-same-version --prefix "$pkg"
-            fi
-          done
-
-      - name: 构建和发布
-        run: |
-          pnpm build:packages
-
-          if [[ "$TARGET_VERSION" =~ -(beta|rc)\.[0-9]+$ ]]; then
-            PUBLISH_TAG="beta"
-          else
-            PUBLISH_TAG="latest"
-          fi
-
-          if [[ "$IS_DRY_RUN" == "true" ]]; then
-            echo "🔍 预演模式: 将发布以下包到 $PUBLISH_TAG 标签"
-            for pkg in packages/*/; do
-              if [[ -d "$pkg" && -f "$pkg/package.json" ]]; then
-                pkg_name=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$pkg/package.json', 'utf8')).name)")
-                echo "  - $pkg_name@$TARGET_VERSION"
-              fi
-            done
-            echo "✅ 预演完成"
-          else
-            echo "📤 发布到 npm ($PUBLISH_TAG 标签)..."
-
-            # 提交版本更新
-            git add packages/*/package.json
-            git commit -m "chore: 发布版本 $TARGET_VERSION [skip ci]"
-
-            # 发布所有包
-            for pkg in packages/*/; do
-              if [[ -d "$pkg" && -f "$pkg/package.json" ]]; then
-                pkg_name=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$pkg/package.json', 'utf8')).name)")
-                echo "📦 发布: $pkg_name"
-                cd "$pkg"
-                npm publish --tag "$PUBLISH_TAG" --access public
-                cd - > /dev/null
-              fi
-            done
-
-            # 创建并推送标签
-            echo "🏷️ 创建 Git 标签..."
-            git tag -a "bestmcp@$TARGET_VERSION" -m "bestmcp@$TARGET_VERSION"
-            git tag -a "@bestmcp/client@$TARGET_VERSION" -m "@bestmcp/client@$TARGET_VERSION"
-            git tag -a "@bestmcp/server@$TARGET_VERSION" -m "@bestmcp/server@$TARGET_VERSION"
-
-            # 推送变更和标签
-            echo "🔄 推送到远程仓库..."
-            git push origin "${{ github.ref_name }}"
-            git push origin "bestmcp@$TARGET_VERSION" "@bestmcp/client@$TARGET_VERSION" "@bestmcp/server@$TARGET_VERSION"
-
-            echo "✅ 发布完成"
-          fi
+      - name: 创建版本更新 PR 或发布到 NPM
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # 这个脚本需要构建包并调用 changeset publish
+          publish: pnpm release
+          commit: "版本更新"
+          title: "版本更新"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

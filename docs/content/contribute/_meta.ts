@@ -6,6 +6,7 @@ const meta: MetaRecord = {
   "dev-example": "开发示例",
   "why-use-alias-to-import-or-export": "为什么使用别名导入导出",
   "why-separate-type-and-value-imports": "为什么分离类型和值导入",
+  "release-process": "发布流程",
 };
 
 export default meta;

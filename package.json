@@ -33,7 +33,9 @@
     "spell:check": "cspell --config config/cspell.json \"**/*.{ts,js,json,md,yaml}\"",
     "check": "biome check .",
     "check:fix": "biome check --write --unsafe .",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build:packages && changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
