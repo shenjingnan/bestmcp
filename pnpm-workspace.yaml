@@ -1,6 +1,5 @@
 packages:
   - packages/*
-  - examples/*
 
 overrides:
   '@conventional-changelog/git-client@<2.0.0': '>=2.0.0'
