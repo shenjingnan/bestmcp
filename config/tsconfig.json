@@ -34,7 +34,7 @@
       "bestmcp/*": ["packages/bestmcp/src/*"]
     }
   },
-  "include": ["../packages/**/*.ts", "../examples/**/*.ts"],
+  "include": ["../packages/**/*.ts"],
   "exclude": ["../node_modules", "../dist"],
   "ts-node": {
     "esm": true
