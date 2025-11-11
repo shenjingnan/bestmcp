@@ -35,7 +35,7 @@
     "check:fix": "biome check --write --unsafe .",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "changeset version && pnpm build:packages && changeset publish"
+    "release": "pnpm build:packages && changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
