@@ -1,6 +1,6 @@
 {
   "version": 2,
   "buildCommand": "pnpm --filter docs install && pnpm --filter docs build",
-  "outputDirectory": "docs/out",
+  "outputDirectory": "out",
   "installCommand": "pnpm --filter docs install"
 }
