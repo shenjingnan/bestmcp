@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "pnpm --filter './docs/**' install && pnpm --filter './docs/**' build",
+  "buildCommand": "pnpm --filter docs install && pnpm --filter docs build",
   "outputDirectory": "docs/out",
-  "installCommand": "pnpm --filter './docs/**' install"
+  "installCommand": "pnpm --filter docs install"
 }
