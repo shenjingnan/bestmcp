@@ -1,7 +1,5 @@
 packages:
   - packages/*
-  - examples/**
-  - tools/*
   - docs
 
 overrides:

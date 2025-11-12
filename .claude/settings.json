@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm run:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install:*)",
+      "Bash(node:*)",
+      "Bash(git symbolic-ref:*)",
+      "Bash(git fetch:*)",
+      "Bash(git --no-pager diff:*)",
+      "Bash(git --no-pager log:*)",
+      "Bash(git --no-pager show:*)",
+      "Bash(git --no-pager tag:*)",
+      "Bash(git --no-pager status)",
+      "Bash(tsc:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "deny": ["Bash(git add:*)", "Bash(git commit:*)", "Bash(git push:*)"],
+    "ask": []
+  }
+}

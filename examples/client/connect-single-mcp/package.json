@@ -1,6 +1,6 @@
 {
   "name": "connect-single-mcp-example",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "连接单个 MCP 服务器示例",
   "main": "dist/index.js",
   "scripts": {
@@ -18,7 +18,8 @@
   "license": "MIT",
   "dependencies": {
     "@bestmcp/client": "workspace:*",
-    "cross-spawn": "^7.0.6"
+    "cross-spawn": "^7.0.6",
+    "zod": "^3.25.76"
   },
   "packageManager": "pnpm@10.13.1"
 }
