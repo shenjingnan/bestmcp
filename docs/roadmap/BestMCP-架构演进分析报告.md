@@ -16,7 +16,7 @@
 packages/bestmcp/
 ├── index.ts           # 单一主文件 (847行代码)
 ├── package.json       # 包配置
-├── tsconfig.json      # TS配置
+├── config/tsconfig.json      # TS配置
 ├── README.md          # 详细文档
 ├── pnpm-lock.yaml     # 依赖锁定
 └── dist/              # 构建输出
@@ -385,8 +385,8 @@ packages/bestmcp/
 │       └── server.ts
 ├── index.ts                    # 导出入口（保持兼容）
 ├── package.json
-├── tsconfig.json
-├── biome.json                  # Biome 配置（新增）
+├── config/tsconfig.json
+├── config/biome.json                  # Biome 配置（新增）
 └── README.md
 ```
 
@@ -457,9 +457,9 @@ packages/bestmcp/
 │   └── patterns/               # 设计模式文档
 ├── index.ts                    # 导出入口
 ├── package.json
-├── tsconfig.json
-├── tsconfig.build.json         # 构建配置（阶段2新增）
-├── biome.json                  # Biome 配置
+├── config/tsconfig.json
+├── config/tsconfig.build.json         # 构建配置（阶段2新增）
+├── config/biome.json                  # Biome 配置
 └── README.md
 ```
 
@@ -839,7 +839,7 @@ tests/
 
 #### 5.2.1 项目引用 (Project References)
 ```json
-// tsconfig.json
+// config/tsconfig.json
 {
   "compilerOptions": {
     "composite": true,
@@ -874,7 +874,7 @@ tests/
 Biome 作为现代化的代码检查和格式化工具，替代了传统的 ESLint + Prettier 组合：
 
 ```json
-// biome.json
+// config/biome.json
 {
   "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
   "organizeImports": {

@@ -1,0 +1,29 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "enableFiletypes": ["typescript", "javascript", "json", "markdown", "yaml", "toml"],
+  "files": ["../**/*.{ts,js,json,md,yml,yaml,toml}"],
+  "ignorePaths": [
+    "../docs/pnpm-lock.yaml",
+    "../docs/out/**",
+    "../docs/node_modules/**",
+    "../dist/**",
+    "../node_modules/**",
+    "../pnpm-lock.yaml",
+    "../coverage/**",
+    "../coverage.lcov/**",
+    "../**/dist/**",
+    "../**/node_modules/**",
+    "../**/coverage/**",
+    "../**/coverage.lcov/**",
+    "../examples/*/node_modules/**"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "name": "project",
+      "path": "../.cspell/project.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": ["project"]
+}

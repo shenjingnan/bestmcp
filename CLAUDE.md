@@ -45,7 +45,7 @@ pnpm type:check         # 类型检查 (不生成文件)
 
 ```mermaid
 graph TD
-    A[根项目 bestmcp] --> B[packages/* 项目]
+    A[根项目 bestmcp-workspace] --> B[packages/* 项目]
     A --> C[examples/* 项目]
 
     D[pnpm build] --> E[build:packages]
@@ -53,13 +53,14 @@ graph TD
 
     E --> G[packages/server]
     E --> H[packages/client]
+    E --> I[packages/bestmcp]
 
-    F --> I[CPU: 269% 利用率]
-    F --> J[时间: 27.1% 减少]
+    F --> J[CPU: 269% 利用率]
+    F --> K[时间: 27.1% 减少]
 
-    K[pnpm dev] --> L[dev:packages]
-    L --> M[并行监听]
-    M --> N[热重载所有包]
+    L[pnpm dev] --> M[dev:packages]
+    M --> N[并行监听]
+    N --> O[热重载所有包]
 ```
 
 ### 推荐开发工作流
@@ -121,17 +122,46 @@ pnpm spell:check
 
 ### 整体结构
 
-这是一个 **monorepo** 项目，使用 pnpm workspace 管理。核心代码位于 `packages/server/` 目录中。
+这是一个 **monorepo** 项目，使用 pnpm workspace 管理。核心代码位于 `packages/` 目录中，包括：
+
+- **`packages/server/`** - MCP 服务器框架核心代码，提供装饰器和传输层功能
+- **`packages/client/`** - MCP 客户端库代码，提供连接和工具调用功能
+- **`packages/bestmcp/`** - 主发布包，聚合 server 和 client 功能，对外提供统一 API
 
 ### 核心模块
 
-#### 主要文件
+#### 包结构关系
+
+```
+packages/bestmcp (主发布包)
+├── 重新导出 packages/server 的所有功能
+├── 重新导出 packages/client 的所有功能
+└── 对外提供统一的 bestmcp npm 包
+
+packages/server (服务器框架)
+├── 装饰器系统 (@Tool, @Param)
+├── 参数验证和 JSON Schema 转换
+├── 传输层管理 (STDIO, HTTP)
+└── MCP 服务器生命周期管理
+
+packages/client (客户端库)
+├── MCP 连接管理
+├── 工具调用封装
+└── 错误处理和重试机制
+```
+
+#### packages/server 主要文件
 
 - **`server.ts`**: BestMCP 主类，负责服务器生命周期管理、工具注册和执行
 - **`decorators.ts`**: `@Tool` 和 `@Param` 装饰器的实现，使用反射元数据存储工具信息
 - **`validation.ts`**: Zod schema 验证和 JSON Schema 转换逻辑
 - **`types.ts`**: 核心类型定义和接口
 - **`errors.ts`**: 自定义错误类定义
+
+#### packages/bestmcp 主文件
+
+- **`src/index.ts`**: 主入口文件，重新导出 server 和 client 的所有公共 API
+- **`package.json`**: 主发布包配置，依赖 server 和 client 作为 workspace 包
 
 #### 传输层架构 (`transports/`)
 
@@ -198,8 +228,8 @@ import { z, type ZodSchema } from "zod";
 
 #### 配置说明
 
-- **TypeScript**: `tsconfig.json` 中启用了 `"verbatimModuleSyntax": true`
-- **Biome**: `biome.json` 中配置了 `"useImportType": { "style": "separatedType" }`
+- **TypeScript**: `config/tsconfig.json` 中启用了 `"verbatimModuleSyntax": true`
+- **Biome**: `config/biome.json` 中配置了 `"useImportType": { "style": "separatedType" }`
 - **自动修复**: 使用 `pnpm check:fix` 可以自动修复大部分导入问题
 - **导入顺序**: Biome 会自动将类型导入排在值导入之前
 
@@ -222,7 +252,7 @@ import { z, type ZodSchema } from "zod";
 ### 代码质量工具
 
 - 使用 **Biome** 进行代码格式化和 linting
-- 配置文件：`biome.json`
+- 配置文件：`config/biome.json`
 - 支持自动导入排序和代码修复
 - 使用 **cspell** 进行拼写检查
 

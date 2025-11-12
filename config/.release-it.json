@@ -28,7 +28,7 @@
     },
     "@release-it/conventional-changelog": {
       "preset": "conventionalcommits",
-      "infile": "CHANGELOG.md",
+      "infile": "docs/content/CHANGELOG.md",
       "releaseCommitMessageFormat": "chore: release v${version}",
       "ignoreRecommendedBump": false,
       "strictSemVer": true

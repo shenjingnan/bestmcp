@@ -21,7 +21,7 @@
     "declaration": true,
     "declarationMap": true,
     "composite": true,
-    "baseUrl": ".",
+    "baseUrl": "..",
     "verbatimModuleSyntax": true,
     "paths": {
       "@server/*": ["packages/server/src/*"],
@@ -34,8 +34,8 @@
       "bestmcp/*": ["packages/bestmcp/src/*"]
     }
   },
-  "include": ["packages/**/*.ts", "examples/**/*.ts"],
-  "exclude": ["node_modules", "dist"],
+  "include": ["../packages/**/*.ts"],
+  "exclude": ["../node_modules", "../dist"],
   "ts-node": {
     "esm": true
   }
