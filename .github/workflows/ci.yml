@@ -18,7 +18,7 @@ jobs:
 
     steps:
     - name: 检出代码
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
         # 确保在 Windows 环境下使用 LF 行结束符
