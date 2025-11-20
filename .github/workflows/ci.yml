@@ -81,7 +81,7 @@ jobs:
         command: pnpm run test:coverage
 
     - name: 上传根目录覆盖率报告 
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       if: matrix.os == 'ubuntu-latest' && matrix.node-version == '20.19.2'
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
