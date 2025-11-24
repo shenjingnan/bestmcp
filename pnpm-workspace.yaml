@@ -1,5 +1,7 @@
 packages:
   - packages/*
+  - examples/server/*
+  - examples/client/*
   - docs
 
 overrides:

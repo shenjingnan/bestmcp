@@ -1,0 +1,14 @@
+{
+  "extends": "../../../config/tsconfig.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "composite": false,
+    "baseUrl": ".",
+    "paths": {
+      "bestmcp": ["../../../packages/bestmcp/src"]
+    }
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "dist"]
+}
