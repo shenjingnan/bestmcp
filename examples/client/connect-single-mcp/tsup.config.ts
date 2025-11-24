@@ -8,7 +8,7 @@ export default defineConfig({
   dts: false,
   clean: true,
   sourcemap: true,
-  external: ["cross-spawn"],
+  external: ["cross-spawn", "bestmcp"],
   treeshake: true,
   minify: false,
   target: "node18",

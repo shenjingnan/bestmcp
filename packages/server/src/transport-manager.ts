@@ -19,17 +19,20 @@ export class TransportManager {
   /**
    * 注册内置传输层
    */
-  private registerBuiltinTransports(): void {
-    // 注册 stdio 传输层工厂函数
-    this.transports.set(TransportType.STDIO, () => new StdioTransport());
-
-    // 注册 http 传输层工厂函数
-    this.transports.set(TransportType.HTTP, () => {
-      return new HTTPTransport({
-        type: TransportType.HTTP,
-        options: {},
-      } as HTTPTransportConfig);
-    });
+  registerBuiltinTransports(): void {
+    this.registerTransport(TransportType.STDIO, () => new StdioTransport());
+    this.registerTransport(
+      TransportType.HTTP,
+      () =>
+        new HTTPTransport({
+          type: TransportType.HTTP,
+          options: {
+            enableJsonResponse: true,
+            port: 8000,
+            host: "127.0.0.1",
+          },
+        }),
+    );
   }
 
   /**
@@ -47,8 +50,8 @@ export class TransportManager {
    * @returns 传输层实例
    */
   async createTransport(config: TransportConfig): Promise<BaseTransport> {
-    if (config.type === TransportType.HTTP) {
-      // 对于 HTTP 传输层，直接使用配置创建
+    // 对于 HTTP 传输层，如果提供了配置，使用配置创建
+    if (config.type === TransportType.HTTP && config.options) {
       return new HTTPTransport(config as HTTPTransportConfig);
     }
 

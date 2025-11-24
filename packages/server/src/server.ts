@@ -1,5 +1,11 @@
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
-import type { CallToolRequest, CallToolResult, Tool as McpSdkTool } from "@server/internal/mcp-sdk";
+import type {
+  CallToolRequest,
+  CallToolResult,
+  Implementation,
+  Tool as McpSdkTool,
+  ServerOptions,
+} from "@server/internal/mcp-sdk";
 import type { BaseTransport, HTTPTransport, HTTPTransportConfig, TransportConfig } from "@server/transports";
 import type {
   BestMCPConfig,
@@ -36,19 +42,27 @@ export class BestMCP {
     this.initializeMCPServer(config);
   }
 
-  private initializeMCPServer(config?: BestMCPConfig) {
-    this.server = new Server(
-      {
-        name: this.name,
-        version: this.version,
+  /**
+   * 初始化 MCP SDK 服务器实例
+   */
+  initializeMCPServer(config: BestMCPConfig): void {
+    const serverOptions: Implementation = {
+      name: this.name,
+      version: this.version,
+    };
+
+    const mcpOptions: ServerOptions = {
+      capabilities: config.capabilities || {
+        tools: {},
       },
-      {
-        capabilities: config?.capabilities || {
-          tools: {},
-        },
-        ...(config?.instructions && { instructions: config.instructions }),
-      },
-    );
+    };
+
+    // 只有当 instructions 存在时才添加
+    if (config.instructions) {
+      mcpOptions.instructions = config.instructions;
+    }
+
+    this.server = new Server(serverOptions, mcpOptions);
   }
 
   private async initializeTransport(transportType: string, options: RunOptions = {}): Promise<void> {

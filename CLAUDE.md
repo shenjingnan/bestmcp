@@ -30,6 +30,47 @@ pnpm clean              # 清理构建输出
 pnpm type:check         # 类型检查 (不生成文件)
 ```
 
+### 🔍 代码质量检查流程
+
+**重要**: 每次代码修改后都必须执行以下检查流程，确保代码质量：
+
+```bash
+# 📋 标准质量检查流程 (按顺序执行)
+nr check:fix            # 代码格式化和自动修复 (Biome)
+nr type:check           # TypeScript 类型检查
+nr test:silent          # 静默执行所有测试
+nr spell:check          # 拼写检查
+```
+
+#### 检查流程说明
+
+1. **`nr check:fix`** - 代码格式化
+   - 使用 Biome 进行代码格式化和 linting
+   - 自动修复导入排序、格式问题
+   - 确保代码符合项目规范
+
+2. **`nr type:check`** - TypeScript 类型检查
+   - 执行完整的 TypeScript 编译器检查
+   - 确保没有类型错误或未定义的方法/属性
+   - 验证导入和类型定义正确性
+
+3. **`nr test:silent`** - 自动化测试
+   - 运行所有单元测试和集成测试
+   - 确保代码修改没有破坏现有功能
+   - 验证所有测试用例通过
+
+4. **`nr spell:check`** - 拼写检查
+   - 使用 cspell 检查代码中的拼写错误
+   - 包括注释、变量名、文档内容
+   - 确保专业性和一致性
+
+#### 质量检查的重要性
+
+- **防止回归**: 确保代码修改不会引入新的错误
+- **保持一致性**: 统一的代码风格和质量标准
+- **早期发现问题**: 在代码提交前发现潜在问题
+- **团队协作**: 保证所有开发者遵循相同的质量标准
+
 ### 构建系统说明
 
 项目使用 **tsup** 作为主要构建工具，基于 esbuild 提供极快的构建速度：
@@ -321,3 +362,80 @@ await mcp.run({ transport: "http", port: 3000 }); // HTTP 模式
 - 使用 `mcp.validateTool(name, args)` 验证参数
 - 使用 `mcp.getToolStats()` 获取统计信息
 - 检查控制台输出的工具注册信息
+
+## 🔧 常见问题排查
+
+### TypeScript 类型错误
+
+#### 常见错误类型
+
+1. **方法未定义错误**
+   ```
+   Property 'xxx' does not exist on type 'YYY'
+   ```
+   **解决方案**:
+   - 检查方法是否在类中正确声明
+   - 确认方法名称拼写正确
+   - 验证访问修饰符（public/private/protected）
+
+2. **导入路径错误**
+   ```
+   Cannot find module 'xxx' or its corresponding type declarations
+   ```
+   **解决方案**:
+   - 检查导入路径是否正确
+   - 确认目标模块是否已导出
+   - 运行 `pnpm install` 更新依赖
+
+3. **类型不兼容错误**
+   ```
+   Type 'X' is not assignable to type 'Y'
+   ```
+   **解决方案**:
+   - 检查类型定义是否匹配
+   - 使用类型断言或类型守卫
+   - 确认可选属性的处理方式
+
+#### 类型错误修复流程
+
+1. **运行类型检查**: `nr type:check`
+2. **定位错误**: 根据错误信息和行号定位问题
+3. **分析原因**: 确定是定义问题、导入问题还是使用问题
+4. **实施修复**: 添加缺失的方法、修正导入或调整类型定义
+5. **验证修复**: 重新运行类型检查确保问题解决
+
+#### 典型修复示例
+
+**添加缺失方法**:
+```typescript
+// 错误：Property 'initializeMCPServer' does not exist
+class BestMCP {
+  constructor(config: BestMCPConfig) {
+    this.initializeMCPServer(config); // 方法未定义
+  }
+
+  // 修复：添加缺失的私有方法
+  private initializeMCPServer(config: BestMCPConfig): void {
+    this.server = new Server(
+      { name: this.name, version: this.version },
+      { capabilities: config.capabilities || { tools: {} } }
+    );
+  }
+}
+```
+
+**处理可选属性**:
+```typescript
+// 错误：Type 'undefined' is not assignable to type 'string'
+const options = {
+  instructions: config.instructions, // 可能是 undefined
+};
+
+// 修复：条件性添加属性
+const options: any = {
+  capabilities: config.capabilities || { tools: {} },
+};
+if (config.instructions) {
+  options.instructions = config.instructions;
+}
+```

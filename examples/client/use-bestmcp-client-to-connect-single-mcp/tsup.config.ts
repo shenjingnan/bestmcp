@@ -8,7 +8,7 @@ export default defineConfig({
   dts: false,
   clean: true,
   sourcemap: true,
-  external: ["@bestmcp/client"],
+  external: ["bestmcp"],
   treeshake: true,
   minify: false,
   target: "node18",
