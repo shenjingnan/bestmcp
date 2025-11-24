@@ -39,7 +39,7 @@ export class BestMCP {
   /**
    * 初始化 MCP SDK 服务器实例
    */
-  private initializeMCPServer(config: BestMCPConfig): void {
+  initializeMCPServer(config: BestMCPConfig): void {
     const serverOptions: any = {
       name: this.name,
       version: this.version,

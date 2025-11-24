@@ -1,6 +1,6 @@
 import type { Server, Transport } from "@server/internal/mcp-sdk";
 import type { BaseTransport, HTTPTransportConfig, TransportConfig } from "@server/transports";
-import { HTTPTransport, StdioTransport, TransportType } from "@server/transports";
+import { HTTPTransport, TransportType } from "@server/transports";
 
 /**
  * 传输层管理器
@@ -19,16 +19,20 @@ export class TransportManager {
   /**
    * 注册内置传输层
    */
-  private registerBuiltinTransports(): void {
+  registerBuiltinTransports(): void {
     this.registerTransport(TransportType.STDIO, () => new StdioTransport());
-    this.registerTransport(TransportType.HTTP, () => new HTTPTransport({
-      type: TransportType.HTTP,
-      options: {
-        enableJsonResponse: true,
-        port: 8000,
-        host: "127.0.0.1",
-      },
-    }));
+    this.registerTransport(
+      TransportType.HTTP,
+      () =>
+        new HTTPTransport({
+          type: TransportType.HTTP,
+          options: {
+            enableJsonResponse: true,
+            port: 8000,
+            host: "127.0.0.1",
+          },
+        }),
+    );
   }
 
   /**

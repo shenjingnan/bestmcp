@@ -29,6 +29,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "correctness": {
+        "noUnusedPrivateClassMembers": "warn"
+      },
       "complexity": {
         "useLiteralKeys": "off"
       },
