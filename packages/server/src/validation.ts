@@ -18,17 +18,12 @@ export function getParamNames(func: Function): string[] {
 // 检查 Zod Schema 是否为可选的
 export function isZodSchemaOptional(zodSchema: z.ZodType<unknown>): boolean {
   try {
-    // 检查是否为 ZodOptional 类型
-    if (zodSchema instanceof z.ZodOptional) {
-      return true;
-    }
-
-    // 检查是否有 isOptional 方法
+    // 首先检查是否有 isOptional 方法（这是最准确的方式）
     if (typeof zodSchema.isOptional === "function") {
       return zodSchema.isOptional();
     }
 
-    // 检查 _def 结构判断是否为可选
+    // 如果没有 isOptional 方法，检查 _def 结构判断是否为 ZodOptional 类型
     const def = (zodSchema as z.ZodType<unknown> & { _def?: { typeName?: string } })._def;
     if (def && def.typeName === "ZodOptional") {
       return true;
@@ -44,8 +39,11 @@ export function isZodSchemaOptional(zodSchema: z.ZodType<unknown>): boolean {
 
 // Zod Schema 转 JSON Schema 的函数
 export function zodSchemaToJsonSchema(zodSchema: z.ZodType<unknown>): JsonSchema {
+  // 安全获取 _def 属性
+  const def = (zodSchema as z.ZodType<unknown> & { _def?: { typeName?: string } })._def;
+
   // 处理基本类型
-  if (zodSchema instanceof z.ZodString) {
+  if (def?.typeName === "ZodString") {
     const schema: JsonSchema = { type: "string" };
 
     // 获取字符串约束
@@ -69,7 +67,7 @@ export function zodSchemaToJsonSchema(zodSchema: z.ZodType<unknown>): JsonSchema
     return schema;
   }
 
-  if (zodSchema instanceof z.ZodNumber) {
+  if (def?.typeName === "ZodNumber") {
     const schema: JsonSchema = { type: "number" };
 
     // 获取数字约束
@@ -89,17 +87,18 @@ export function zodSchemaToJsonSchema(zodSchema: z.ZodType<unknown>): JsonSchema
     return schema;
   }
 
-  if (zodSchema instanceof z.ZodBoolean) {
+  if (def?.typeName === "ZodBoolean") {
     return { type: "boolean" };
   }
 
-  if (zodSchema instanceof z.ZodArray) {
-    const itemType = zodSchemaToJsonSchema(zodSchema.element);
+  if (def?.typeName === "ZodArray") {
+    const element = (zodSchema as z.ZodArray<z.ZodType<unknown>>).element;
+    const itemType = zodSchemaToJsonSchema(element);
     return { type: "array", items: itemType };
   }
 
-  if (zodSchema instanceof z.ZodObject) {
-    const shape = zodSchema.shape;
+  if (def?.typeName === "ZodObject") {
+    const shape = (zodSchema as z.ZodObject<Record<string, z.ZodType<unknown>>>).shape;
     const properties: Record<string, JsonSchema> = {};
     const required: string[] = [];
 
@@ -132,7 +131,7 @@ export function zodSchemaToJsonSchema(zodSchema: z.ZodType<unknown>): JsonSchema
     return { type: "object", properties, required };
   }
 
-  if (zodSchema instanceof z.ZodEnum) {
+  if (def?.typeName === "ZodEnum") {
     // 使用类型断言来绕过 ZodEnum 的复杂类型约束
     const enumSchema = zodSchema as z.ZodEnum<[string, ...string[]]> & { _def?: { values?: unknown[] } };
     const enumValues = enumSchema._def?.values || [];
@@ -145,7 +144,7 @@ export function zodSchemaToJsonSchema(zodSchema: z.ZodType<unknown>): JsonSchema
     };
   }
 
-  if (zodSchema instanceof z.ZodUnion) {
+  if (def?.typeName === "ZodUnion") {
     // 处理联合类型，返回第一个选项的类型
     const firstOption = (
       zodSchema as z.ZodUnion<[z.ZodType<unknown>, ...z.ZodType<unknown>[]]> & {
@@ -158,12 +157,13 @@ export function zodSchemaToJsonSchema(zodSchema: z.ZodType<unknown>): JsonSchema
     return { type: "string" }; // 默认返回字符串类型
   }
 
-  if (zodSchema instanceof z.ZodOptional) {
+  if (def?.typeName === "ZodOptional") {
     // 可选类型返回内部类型
-    const innerSchema = (zodSchema as z.ZodOptional<z.ZodType<unknown>>)._def;
-    if (innerSchema && typeof innerSchema === "object" && "type" in innerSchema) {
-      return zodSchemaToJsonSchema(innerSchema.type as z.ZodType<unknown>);
+    const innerSchema = (zodSchema as z.ZodOptional<z.ZodType<unknown>>)._def.innerType;
+    if (innerSchema) {
+      return zodSchemaToJsonSchema(innerSchema as z.ZodType<unknown>);
     }
+    // 如果无法提取内部类型，返回字符串类型作为安全回退
     return { type: "string" };
   }
 

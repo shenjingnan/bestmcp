@@ -7,7 +7,7 @@ class CalculatorService {
     @Param(z.number(), "第一个值")
     a: number,
     @Param(z.number(), "第二个值")
-    b: number,
+    b: number
   ): number {
     return a + b;
   }
@@ -17,7 +17,7 @@ class CalculatorService {
     @Param(z.number(), "第一个值")
     a: number,
     @Param(z.number(), "第二个值")
-    b: number,
+    b: number
   ): number {
     return a - b;
   }
@@ -27,7 +27,7 @@ class CalculatorService {
     @Param(z.number(), "第一个值")
     a: number,
     @Param(z.number(), "第二个值")
-    b: number,
+    b: number
   ): number {
     return a * b;
   }
@@ -37,9 +37,22 @@ class CalculatorService {
     @Param(z.number(), "第一个值")
     a: number,
     @Param(z.number(), "第二个值")
-    b: number,
+    b: number
   ): number {
     return a / b;
+  }
+
+  @Tool("测试 optioanl number 是否正确")
+  public async testOptionalNumberParam(
+    @Param(z.string().describe("测试参数1字符串类型"))
+    param1: string,
+    @Param(z.number().optional().describe("测试参数2数字类型"), "测试参数2数字类型")
+    param2?: number
+  ) {
+    console.log({
+      param1,
+      param2,
+    });
   }
 }
 
