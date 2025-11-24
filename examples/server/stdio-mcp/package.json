@@ -1,8 +1,9 @@
 {
   "name": "calculator-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Calculator MCP",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",

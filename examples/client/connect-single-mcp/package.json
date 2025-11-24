@@ -1,7 +1,8 @@
 {
   "name": "connect-single-mcp-example",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "连接单个 MCP 服务器示例",
+  "private": true,
   "main": "dist/index.js",
   "scripts": {
     "build": "tsup",
