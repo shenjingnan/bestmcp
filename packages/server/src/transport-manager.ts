@@ -1,6 +1,6 @@
 import type { Server, Transport } from "@server/internal/mcp-sdk";
 import type { BaseTransport, HTTPTransportConfig, TransportConfig } from "@server/transports";
-import { HTTPTransport, StdioTransport, TransportType } from "@server/transports";
+import { HTTPTransport, TransportType } from "@server/transports";
 
 /**
  * 传输层管理器
@@ -14,22 +14,6 @@ export class TransportManager {
   constructor() {
     // 注册内置传输层
     this.registerBuiltinTransports();
-  }
-
-  /**
-   * 注册内置传输层
-   */
-  private registerBuiltinTransports(): void {
-    // 注册 stdio 传输层工厂函数
-    this.transports.set(TransportType.STDIO, () => new StdioTransport());
-
-    // 注册 http 传输层工厂函数
-    this.transports.set(TransportType.HTTP, () => {
-      return new HTTPTransport({
-        type: TransportType.HTTP,
-        options: {},
-      } as HTTPTransportConfig);
-    });
   }
 
   /**

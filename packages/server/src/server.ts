@@ -36,21 +36,6 @@ export class BestMCP {
     this.initializeMCPServer(config);
   }
 
-  private initializeMCPServer(config?: BestMCPConfig) {
-    this.server = new Server(
-      {
-        name: this.name,
-        version: this.version,
-      },
-      {
-        capabilities: config?.capabilities || {
-          tools: {},
-        },
-        ...(config?.instructions && { instructions: config.instructions }),
-      },
-    );
-  }
-
   private async initializeTransport(transportType: string, options: RunOptions = {}): Promise<void> {
     const config: TransportConfig = this.createTransportConfig(transportType, options);
     this.currentTransport = await this.transportManager.createTransport(config);
