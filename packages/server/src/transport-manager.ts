@@ -1,6 +1,6 @@
 import type { Server, Transport } from "@server/internal/mcp-sdk";
 import type { BaseTransport, HTTPTransportConfig, TransportConfig } from "@server/transports";
-import { HTTPTransport, TransportType } from "@server/transports";
+import { HTTPTransport, StdioTransport, TransportType } from "@server/transports";
 
 /**
  * 传输层管理器

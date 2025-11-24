@@ -1,5 +1,11 @@
 import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http";
-import type { CallToolRequest, CallToolResult, Tool as McpSdkTool } from "@server/internal/mcp-sdk";
+import type {
+  CallToolRequest,
+  CallToolResult,
+  Implementation,
+  Tool as McpSdkTool,
+  ServerOptions,
+} from "@server/internal/mcp-sdk";
 import type { BaseTransport, HTTPTransport, HTTPTransportConfig, TransportConfig } from "@server/transports";
 import type {
   BestMCPConfig,
@@ -40,12 +46,12 @@ export class BestMCP {
    * 初始化 MCP SDK 服务器实例
    */
   initializeMCPServer(config: BestMCPConfig): void {
-    const serverOptions: any = {
+    const serverOptions: Implementation = {
       name: this.name,
       version: this.version,
     };
 
-    const mcpOptions: any = {
+    const mcpOptions: ServerOptions = {
       capabilities: config.capabilities || {
         tools: {},
       },
