@@ -41,6 +41,19 @@ class CalculatorService {
   ): number {
     return a / b;
   }
+
+  @Tool("测试 optional number 是否正确")
+  public async testOptionalNumberParam(
+    @Param(z.string().describe("测试参数1字符串类型"))
+    param1: string,
+    @Param(z.number().optional().describe("测试参数2数字类型"), "测试参数2数字类型")
+    param2?: number,
+  ) {
+    console.log({
+      param1,
+      param2,
+    });
+  }
 }
 
 const mcp = new BestMCP({

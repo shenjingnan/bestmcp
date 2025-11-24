@@ -9,6 +9,20 @@ import {
 } from "@server/validation";
 import { z } from "zod";
 
+/**
+ * 创建用于测试的 mock Zod schema 对象
+ * 使用双重断言确保类型安全，避免 mock 对象需要完整实现 ZodType 接口
+ */
+function createMockZodType<T extends string>(
+  typeName: T,
+  additionalProps?: Record<string, unknown>,
+): z.ZodType<unknown> {
+  return {
+    _def: { typeName },
+    ...additionalProps,
+  } as unknown as z.ZodType<unknown>;
+}
+
 describe("获取参数名称", () => {
   it("应该从简单函数中提取参数名称", () => {
     function testFunc(a: string, b: number) {
@@ -247,7 +261,7 @@ describe("zodSchemaToJsonSchema", () => {
         type: "object",
         properties: {
           name: { type: "string" },
-          age: { type: "string" }, // Zod optional gets unwrapped to string in our implementation
+          age: { type: "number" }, // 可选数字应该保持数字类型
         },
         required: ["name"],
       });
@@ -267,6 +281,130 @@ describe("zodSchemaToJsonSchema", () => {
         },
         required: ["name", "age"],
       });
+    });
+  });
+
+  describe("可选类型处理", () => {
+    it("应该正确处理可选字符串类型", () => {
+      const schema = z.string().optional();
+      const jsonSchema = zodSchemaToJsonSchema(schema);
+      expect(jsonSchema).toEqual({
+        type: "string",
+      });
+    });
+
+    it("应该正确处理可选布尔类型", () => {
+      const schema = z.boolean().optional();
+      const jsonSchema = zodSchemaToJsonSchema(schema);
+      expect(jsonSchema).toEqual({
+        type: "boolean",
+      });
+    });
+
+    it("应该正确处理可选数组类型", () => {
+      const schema = z.array(z.string()).optional();
+      const jsonSchema = zodSchemaToJsonSchema(schema);
+      expect(jsonSchema).toEqual({
+        type: "array",
+        items: { type: "string" },
+      });
+    });
+
+    it("应该正确处理复杂可选类型", () => {
+      const schema = z.object({
+        id: z.number().optional(),
+        name: z.string().optional(),
+        active: z.boolean().optional(),
+        tags: z.array(z.string()).optional(),
+      });
+      const jsonSchema = zodSchemaToJsonSchema(schema);
+      expect(jsonSchema).toEqual({
+        type: "object",
+        properties: {
+          id: { type: "number" },
+          name: { type: "string" },
+          active: { type: "boolean" },
+          tags: { type: "array", items: { type: "string" } },
+        },
+        required: [],
+      });
+    });
+  });
+
+  describe("多实例兼容性", () => {
+    it("应该正确处理来自不同 Zod 实例的类型", () => {
+      // 模拟不同 Zod 实例的场景（通过手动创建具有 _def 结构的对象）
+      const mockStringSchema = createMockZodType("ZodString");
+
+      const mockNumberSchema = createMockZodType("ZodNumber");
+
+      const mockBooleanSchema = createMockZodType("ZodBoolean");
+
+      const mockOptionalStringSchema = createMockZodType("ZodOptional", {
+        innerType: { _def: { typeName: "ZodString" } },
+        isOptional: () => true,
+      });
+
+      // 测试字符串类型
+      const stringResult = zodSchemaToJsonSchema(mockStringSchema);
+      expect(stringResult).toEqual({ type: "string" });
+
+      // 测试数字类型
+      const numberResult = zodSchemaToJsonSchema(mockNumberSchema);
+      expect(numberResult).toEqual({ type: "number" });
+
+      // 测试布尔类型
+      const booleanResult = zodSchemaToJsonSchema(mockBooleanSchema);
+      expect(booleanResult).toEqual({ type: "boolean" });
+
+      // 测试可选字符串类型
+      const optionalStringResult = zodSchemaToJsonSchema(mockOptionalStringSchema);
+      expect(optionalStringResult).toEqual({ type: "string" });
+    });
+
+    it("应该正确处理 _def 属性缺失的情况", () => {
+      // 测试没有 _def 属性的异常情况
+      const mockSchemaWithoutDef = {} as z.ZodType<unknown>;
+
+      const result = zodSchemaToJsonSchema(mockSchemaWithoutDef);
+      expect(result).toEqual({ type: "string" }); // 默认回退类型
+    });
+
+    it("应该正确处理未知 typeName 的情况", () => {
+      // 测试未知的 typeName
+      const mockUnknownSchema = createMockZodType("ZodUnknownType");
+
+      const result = zodSchemaToJsonSchema(mockUnknownSchema);
+      expect(result).toEqual({ type: "string" }); // 默认回退类型
+    });
+
+    it("应该正确识别不同实例的可选类型", () => {
+      // 模拟不同实例的可选类型
+      const mockOptionalSchema1 = createMockZodType("ZodOptional");
+      // 没有 isOptional 方法，应该根据 _def.typeName 判断
+
+      const mockOptionalSchema2 = createMockZodType("ZodString");
+      // 没有 isOptional 方法，也不是 ZodOptional
+
+      const mockOptionalSchema3 = createMockZodType("ZodString", {
+        isOptional: () => true, // 有 isOptional 方法且返回 true
+      });
+
+      const mockOptionalSchema4 = createMockZodType("ZodString", {
+        isOptional: () => false, // 有 isOptional 方法但返回 false
+      });
+
+      // ZodOptional 类型应该被识别为可选
+      expect(isZodSchemaOptional(mockOptionalSchema1)).toBe(true);
+
+      // 不是 ZodOptional 类型且没有 isOptional 方法，应该返回 false
+      expect(isZodSchemaOptional(mockOptionalSchema2)).toBe(false);
+
+      // 有 isOptional 方法且返回 true，应该返回 true
+      expect(isZodSchemaOptional(mockOptionalSchema3)).toBe(true);
+
+      // 有 isOptional 方法但返回 false，应该返回 false
+      expect(isZodSchemaOptional(mockOptionalSchema4)).toBe(false);
     });
   });
 
