@@ -42,7 +42,7 @@ class CalculatorService {
     return a / b;
   }
 
-  @Tool("测试 optioanl number 是否正确")
+  @Tool("测试 optional number 是否正确")
   public async testOptionalNumberParam(
     @Param(z.string().describe("测试参数1字符串类型"))
     param1: string,

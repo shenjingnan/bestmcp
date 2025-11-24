@@ -9,6 +9,20 @@ import {
 } from "@server/validation";
 import { z } from "zod";
 
+/**
+ * 创建用于测试的 mock Zod schema 对象
+ * 使用双重断言确保类型安全，避免 mock 对象需要完整实现 ZodType 接口
+ */
+function createMockZodType<T extends string>(
+  typeName: T,
+  additionalProps?: Record<string, unknown>,
+): z.ZodType<unknown> {
+  return {
+    _def: { typeName },
+    ...additionalProps,
+  } as unknown as z.ZodType<unknown>;
+}
+
 describe("获取参数名称", () => {
   it("应该从简单函数中提取参数名称", () => {
     function testFunc(a: string, b: number) {
@@ -320,22 +334,16 @@ describe("zodSchemaToJsonSchema", () => {
   describe("多实例兼容性", () => {
     it("应该正确处理来自不同 Zod 实例的类型", () => {
       // 模拟不同 Zod 实例的场景（通过手动创建具有 _def 结构的对象）
-      const mockStringSchema = {
-        _def: { typeName: "ZodString" },
-      } as z.ZodType<unknown>;
+      const mockStringSchema = createMockZodType("ZodString");
 
-      const mockNumberSchema = {
-        _def: { typeName: "ZodNumber" },
-      } as z.ZodType<unknown>;
+      const mockNumberSchema = createMockZodType("ZodNumber");
 
-      const mockBooleanSchema = {
-        _def: { typeName: "ZodBoolean" },
-      } as z.ZodType<unknown>;
+      const mockBooleanSchema = createMockZodType("ZodBoolean");
 
-      const mockOptionalStringSchema = {
-        _def: { typeName: "ZodOptional", innerType: { _def: { typeName: "ZodString" } } },
+      const mockOptionalStringSchema = createMockZodType("ZodOptional", {
+        innerType: { _def: { typeName: "ZodString" } },
         isOptional: () => true,
-      } as z.ZodType<unknown>;
+      });
 
       // 测试字符串类型
       const stringResult = zodSchemaToJsonSchema(mockStringSchema);
@@ -364,9 +372,7 @@ describe("zodSchemaToJsonSchema", () => {
 
     it("应该正确处理未知 typeName 的情况", () => {
       // 测试未知的 typeName
-      const mockUnknownSchema = {
-        _def: { typeName: "ZodUnknownType" },
-      } as z.ZodType<unknown>;
+      const mockUnknownSchema = createMockZodType("ZodUnknownType");
 
       const result = zodSchemaToJsonSchema(mockUnknownSchema);
       expect(result).toEqual({ type: "string" }); // 默认回退类型
@@ -374,25 +380,19 @@ describe("zodSchemaToJsonSchema", () => {
 
     it("应该正确识别不同实例的可选类型", () => {
       // 模拟不同实例的可选类型
-      const mockOptionalSchema1 = {
-        _def: { typeName: "ZodOptional" },
-        // 没有 isOptional 方法，应该根据 _def.typeName 判断
-      } as z.ZodType<unknown>;
+      const mockOptionalSchema1 = createMockZodType("ZodOptional");
+      // 没有 isOptional 方法，应该根据 _def.typeName 判断
 
-      const mockOptionalSchema2 = {
-        _def: { typeName: "ZodString" },
-        // 没有 isOptional 方法，也不是 ZodOptional
-      } as z.ZodType<unknown>;
+      const mockOptionalSchema2 = createMockZodType("ZodString");
+      // 没有 isOptional 方法，也不是 ZodOptional
 
-      const mockOptionalSchema3 = {
-        _def: { typeName: "ZodString" },
+      const mockOptionalSchema3 = createMockZodType("ZodString", {
         isOptional: () => true, // 有 isOptional 方法且返回 true
-      } as z.ZodType<unknown>;
+      });
 
-      const mockOptionalSchema4 = {
-        _def: { typeName: "ZodString" },
+      const mockOptionalSchema4 = createMockZodType("ZodString", {
         isOptional: () => false, // 有 isOptional 方法但返回 false
-      } as z.ZodType<unknown>;
+      });
 
       // ZodOptional 类型应该被识别为可选
       expect(isZodSchemaOptional(mockOptionalSchema1)).toBe(true);
