@@ -36,6 +36,29 @@ export class BestMCP {
     this.initializeMCPServer(config);
   }
 
+  /**
+   * 初始化 MCP SDK 服务器实例
+   */
+  private initializeMCPServer(config: BestMCPConfig): void {
+    const serverOptions: any = {
+      name: this.name,
+      version: this.version,
+    };
+
+    const mcpOptions: any = {
+      capabilities: config.capabilities || {
+        tools: {},
+      },
+    };
+
+    // 只有当 instructions 存在时才添加
+    if (config.instructions) {
+      mcpOptions.instructions = config.instructions;
+    }
+
+    this.server = new Server(serverOptions, mcpOptions);
+  }
+
   private async initializeTransport(transportType: string, options: RunOptions = {}): Promise<void> {
     const config: TransportConfig = this.createTransportConfig(transportType, options);
     this.currentTransport = await this.transportManager.createTransport(config);
