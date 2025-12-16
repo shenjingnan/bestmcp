@@ -90,7 +90,7 @@ importers:
         version: 7.0.6
       zod:
         specifier: ^3.25.76
-        version: 3.25.76
+        version: 4.2.1
 
   examples/client/use-bestmcp-client-to-connect-single-mcp:
     dependencies:
@@ -99,7 +99,7 @@ importers:
         version: link:../../../packages/bestmcp
       zod:
         specifier: ^3.25.0
-        version: 3.25.76
+        version: 4.2.1
 
   examples/server/http-mcp:
     dependencies:
@@ -108,7 +108,7 @@ importers:
         version: link:../../../packages/bestmcp
       zod:
         specifier: ^3.25.0
-        version: 3.25.76
+        version: 4.2.1
 
   examples/server/stdio-mcp:
     dependencies:
@@ -117,7 +117,7 @@ importers:
         version: link:../../../packages/bestmcp
       zod:
         specifier: ^3.25.0
-        version: 3.25.76
+        version: 4.2.1
 
   packages/bestmcp:
     dependencies:
@@ -135,7 +135,7 @@ importers:
         version: 0.2.2
       zod:
         specifier: ^4.0.0
-        version: 4.1.13
+        version: 4.2.1
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.2.6
@@ -4461,8 +4461,8 @@ packages:
   zod@4.0.0-beta.20250424T163858:
     resolution: {integrity: sha512-fKhW+lEJnfUGo0fvQjmam39zUytARR2UdCEh7/OXJSBbKScIhD343K74nW+UUHu/r6dkzN6Uc/GqwogFjzpCXg==}
 
-  zod@4.1.13:
-    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
+  zod@4.2.1:
+    resolution: {integrity: sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==}
 
   zustand@5.0.8:
     resolution: {integrity: sha512-gyPKpIaxY9XcO2vSMrLbiER7QMAMGOQZVRdJ6Zi782jkbzZygq5GI9nG8g+sMgitRtndwaBSl7uiqC49o1SSiw==}
@@ -9263,7 +9263,7 @@ snapshots:
     dependencies:
       '@zod/core': 0.9.0
 
-  zod@4.1.13: {}
+  zod@4.2.1: {}
 
   zustand@5.0.8(@types/react@19.2.2)(react@19.2.0)(use-sync-external-store@1.6.0(react@19.2.0)):
     optionalDependencies:
