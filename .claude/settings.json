@@ -12,13 +12,20 @@
       "Bash(git --no-pager show:*)",
       "Bash(git --no-pager tag:*)",
       "Bash(git --no-pager status)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
       "Bash(tsc:*)",
       "Bash(cat:*)",
       "Bash(find:*)",
       "WebFetch",
       "WebSearch"
     ],
-    "deny": ["Bash(git add:*)", "Bash(git commit:*)", "Bash(git push:*)"],
+    "deny": [],
     "ask": []
+  },
+  "attribution": {
+    "commit": "🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: GLM-5 <noreply@bigmodel.cn>",
+    "pr": ""
   }
 }
