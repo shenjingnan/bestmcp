@@ -36,7 +36,7 @@ jobs:
     - name: 安装 pnpm
       uses: pnpm/action-setup@v4
       with:
-        version: 10.23.0
+        version: 10.32.1
 
     - name: 设置 Node.js
       uses: actions/setup-node@v6
@@ -92,7 +92,7 @@ jobs:
         verbose: true
 
     - name: 上传构建产物
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       if: success()
       with:
         name: build-artifacts-cli-${{ matrix.os }}-node${{ matrix.node-version }}
