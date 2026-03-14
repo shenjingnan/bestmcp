@@ -1,5 +1,7 @@
 import { defineConfig } from "tsup";
 
+const isProduction = process.env["NODE_ENV"] === "production";
+
 export default defineConfig({
   entry: {
     index: "src/index.ts",
@@ -10,10 +12,15 @@ export default defineConfig({
   sourcemap: true,
   external: [],
   treeshake: true,
-  minify: false,
+  minify: isProduction,
   target: "node18",
   outDir: "dist",
   splitting: false,
+  esbuildOptions(options) {
+    if (isProduction) {
+      options.drop = ["console", "debugger"];
+    }
+  },
   swc: {
     minify: false,
     jsc: {

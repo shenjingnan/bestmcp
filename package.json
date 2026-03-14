@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "build": "pnpm build:packages",
+    "build:prod": "NODE_ENV=production pnpm build:packages",
     "build:packages": "pnpm -r --filter './packages/**' build",
     "build:examples": "pnpm -r --filter './examples/**' build",
     "build:all": "pnpm build:packages && pnpm build:examples",

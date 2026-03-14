@@ -23,7 +23,7 @@ export class BestMCPClient {
   unregistry(name: string): void {
     const client = this.clients.get(name);
     if (client) {
-      client.disconnect().catch(console.warn);
+      client.disconnect().catch(() => {}); // 静默处理断开连接错误
       this.clients.delete(name);
     }
   }
