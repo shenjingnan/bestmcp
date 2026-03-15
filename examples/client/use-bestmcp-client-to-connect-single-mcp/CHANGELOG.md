@@ -1,5 +1,12 @@
 # client-demo
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies [ff67117]
+  - bestmcp@0.2.2
+
 ## 1.0.5
 
 ### Patch Changes
