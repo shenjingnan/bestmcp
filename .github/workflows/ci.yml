@@ -45,7 +45,7 @@ jobs:
         cache: 'pnpm'
 
     - name: 安装依赖
-      uses: nick-invision/retry@v3
+      uses: nick-invision/retry@v4
       with:
         timeout_minutes: 5
         max_attempts: 2
@@ -63,7 +63,7 @@ jobs:
       run: pnpm run spell:check
 
     - name: 构建项目
-      uses: nick-invision/retry@v3
+      uses: nick-invision/retry@v4
       with:
         timeout_minutes: 5
         max_attempts: 2
@@ -73,7 +73,7 @@ jobs:
           pnpm --filter bestmcp run build
 
     - name: 运行测试并生成覆盖率报告
-      uses: nick-invision/retry@v3
+      uses: nick-invision/retry@v4
       with:
         timeout_minutes: 10
         max_attempts: 2
